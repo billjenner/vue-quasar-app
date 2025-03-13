@@ -1,8 +1,9 @@
 <template>
   <div>
     <h1>Todo List</h1>
+    <input v-model="searchQuery" placeholder="Search todos" class="search-input">
     <div class="todo-list">
-      <div class="todo-card" v-for="todo in todos" :key="todo._id">
+      <div class="todo-card" v-for="todo in filteredTodos" :key="todo._id">
         <div class="todo-header">
           <span :class="{ completed: todo.completed }">{{ todo.title }}</span>
           <button @click="toggleExpand(todo)">
@@ -28,12 +29,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 
 const todos = ref([]);
 const newTodoTitle = ref('');
 const newTodoText = ref('');
+const searchQuery = ref('');
 
 const fetchTodos = async () => {
   const response = await axios.get('http://localhost:3000/todos');
@@ -64,6 +66,13 @@ const deleteTodo = async (id) => {
 const toggleExpand = (todo) => {
   todo.expanded = !todo.expanded;
 };
+
+const filteredTodos = computed(() => {
+  return todos.value.filter(todo => 
+    todo.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    todo.text.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 
 onMounted(fetchTodos);
 </script>
@@ -106,5 +115,12 @@ onMounted(fetchTodos);
 
 .add-todo {
   margin-top: 1rem;
+}
+
+.search-input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 </style>
