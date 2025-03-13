@@ -5,8 +5,12 @@
       <div class="todo-card" v-for="todo in todos" :key="todo._id">
         <div class="todo-header">
           <span :class="{ completed: todo.completed }">{{ todo.title }}</span>
+          <button @click="toggleExpand(todo)">
+            <span v-if="todo.expanded">▼</span>
+            <span v-else>▶</span>
+          </button>
         </div>
-        <div class="todo-body">
+        <div v-if="todo.expanded" class="todo-body">
           <p>{{ todo.text }}</p>
         </div>
         <div class="todo-footer">
@@ -33,7 +37,7 @@ const newTodoText = ref('');
 
 const fetchTodos = async () => {
   const response = await axios.get('http://localhost:3000/todos');
-  todos.value = response.data;
+  todos.value = response.data.map(todo => ({ ...todo, expanded: false }));
 };
 
 const addTodo = async () => {
@@ -43,7 +47,7 @@ const addTodo = async () => {
     text: newTodoText.value,
     completed: false
   });
-  todos.value.push(response.data);
+  todos.value.push({ ...response.data, expanded: false });
   newTodoTitle.value = '';
   newTodoText.value = '';
 };
@@ -55,6 +59,10 @@ const updateTodo = async (todo) => {
 const deleteTodo = async (id) => {
   await axios.delete(`http://localhost:3000/todos/${id}`);
   todos.value = todos.value.filter(todo => todo._id !== id);
+};
+
+const toggleExpand = (todo) => {
+  todo.expanded = !todo.expanded;
 };
 
 onMounted(fetchTodos);
