@@ -23,45 +23,41 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      todos: [],
-      newTodoTitle: '',
-      newTodoText: ''
-    };
-  },
-  created() {
-    this.fetchTodos();
-  },
-  methods: {
-    async fetchTodos() {
-      const response = await axios.get('http://localhost:3000/todos');
-      this.todos = response.data;
-    },
-    async addTodo() {
-      if (this.newTodoTitle.trim() === '' || this.newTodoText.trim() === '') return;
-      const response = await axios.post('http://localhost:3000/todos', {
-        title: this.newTodoTitle,
-        text: this.newTodoText,
-        completed: false
-      });
-      this.todos.push(response.data);
-      this.newTodoTitle = '';
-      this.newTodoText = '';
-    },
-    async updateTodo(todo) {
-      await axios.put(`http://localhost:3000/todos/${todo._id}`, todo);
-    },
-    async deleteTodo(id) {
-      await axios.delete(`http://localhost:3000/todos/${id}`);
-      this.todos = this.todos.filter(todo => todo._id !== id);
-    }
-  }
+const todos = ref([]);
+const newTodoTitle = ref('');
+const newTodoText = ref('');
+
+const fetchTodos = async () => {
+  const response = await axios.get('http://localhost:3000/todos');
+  todos.value = response.data;
 };
+
+const addTodo = async () => {
+  if (newTodoTitle.value.trim() === '' || newTodoText.value.trim() === '') return;
+  const response = await axios.post('http://localhost:3000/todos', {
+    title: newTodoTitle.value,
+    text: newTodoText.value,
+    completed: false
+  });
+  todos.value.push(response.data);
+  newTodoTitle.value = '';
+  newTodoText.value = '';
+};
+
+const updateTodo = async (todo) => {
+  await axios.put(`http://localhost:3000/todos/${todo._id}`, todo);
+};
+
+const deleteTodo = async (id) => {
+  await axios.delete(`http://localhost:3000/todos/${id}`);
+  todos.value = todos.value.filter(todo => todo._id !== id);
+};
+
+onMounted(fetchTodos);
 </script>
 
 <style>
