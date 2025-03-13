@@ -1,7 +1,14 @@
 <template>
   <div class="container">
     <h1>Todo List</h1>
-    <input v-model="searchQuery" placeholder="Search todos" class="search-input col-2">
+    <div class="input-container">
+      <div class="input-row">
+        <input v-model="searchQuery" placeholder="Search todos" class="search-input col-2">
+        <input v-model="newTodoTitle" placeholder="Title" class="title-input">
+        <input v-model="newTodoText" placeholder="Text" class="text-input" @keyup.enter="addTodo">
+        <button @click="addTodo" class="add-button">Add Todo</button>
+      </div>
+    </div>
     <div class="todo-list">
       <div class="todo-card" v-for="todo in filteredTodos" :key="todo._id">
         <div class="todo-header">
@@ -19,11 +26,6 @@
           <button @click="deleteTodo(todo._id)">Delete</button>
         </div>
       </div>
-    </div>
-    <div class="add-todo">
-      <input v-model="newTodoTitle" placeholder="Title">
-      <input v-model="newTodoText" placeholder="Text" @keyup.enter="addTodo">
-      <button @click="addTodo">Add Todo</button>
     </div>
   </div>
 </template>
@@ -83,6 +85,50 @@ onMounted(fetchTodos);
   margin: 0 auto;
 }
 
+.input-container {
+  width: 96%;
+  margin: 0 auto;
+  flex-shrink: 0;
+  min-width: 96%;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.search-input, .title-input, .text-input {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.title-input {
+  margin-left: 1rem;
+  flex: 1;
+}
+
+.text-input {
+  margin-left: 1rem;
+  flex: 2;
+}
+
+.add-button {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  background-color: #044080;
+  color: white;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+}
+
 .todo-list {
   display: flex;
   flex-wrap: wrap;
@@ -116,16 +162,5 @@ onMounted(fetchTodos);
 
 .completed {
   text-decoration: line-through;
-}
-
-.add-todo {
-  margin-top: 1rem;
-}
-
-.search-input {
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  width: 30%; /* col-2 size */
-  box-sizing: border-box;
 }
 </style>
