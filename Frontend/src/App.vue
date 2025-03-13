@@ -10,6 +10,12 @@ import TodoList from './components/TodoList.vue';
 </template>
 
 <style scoped>
+#app {
+  width: 98vw; /* 98% of the viewport width */
+  height: 98vh; /* 98% of the viewport height */
+  margin: 0 auto; /* Center the div horizontally */
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
