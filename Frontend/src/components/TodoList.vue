@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Todo List</h1>
-    <input v-model="searchQuery" placeholder="Search todos" class="search-input">
+    <input v-model="searchQuery" placeholder="Search todos" class="search-input col-2">
     <div class="todo-list">
       <div class="todo-card" v-for="todo in filteredTodos" :key="todo._id">
         <div class="todo-header">
@@ -78,6 +78,11 @@ onMounted(fetchTodos);
 </script>
 
 <style>
+.container {
+  width: 96%;
+  margin: 0 auto;
+}
+
 .todo-list {
   display: flex;
   flex-wrap: wrap;
@@ -120,7 +125,7 @@ onMounted(fetchTodos);
 .search-input {
   margin-bottom: 1rem;
   padding: 0.5rem;
-  width: 100%;
+  width: 30%; /* col-2 size */
   box-sizing: border-box;
 }
 </style>
