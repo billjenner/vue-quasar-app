@@ -1,8 +1,12 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from './components/HelloWorld.vue';
+import TodoList from './components/TodoList.vue';
 </script>
 
 <template>
+    <div id="app">
+    <TodoList />
+  </div>
   <div>
     <a href="https://vite.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />

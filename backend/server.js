@@ -36,6 +36,7 @@ db.once('open', () => {
 
 // Define Schema and Model
 const todoSchema = new mongoose.Schema({
+  title: String,
   text: String,
   completed: Boolean,
 });
@@ -55,6 +56,13 @@ app.post('/todos', async (req, res) => {
   });
   const savedTodo = await newTodo.save();
   res.json(savedTodo);
+});
+
+app.put('/todos/:id', async (req, res) => {
+  const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+  res.json(updatedTodo);
 });
 
 app.delete('/todos/:id', async (req, res) => {
