@@ -11,7 +11,7 @@ import TodoList from './components/TodoList.vue';
 
 <style scoped>
 #app {
-  width: 98vw; /* 98% of the viewport width */
+  width: 96cqmin; /* 98% of the viewport width */
   height: 98vh; /* 98% of the viewport height */
   margin: 0 auto; /* Center the div horizontally */
 }

@@ -5,8 +5,10 @@
       <div class="input-row">
         <input v-model="searchQuery" placeholder="Search todos" class="search-input outlined-yellow col-2">
         <div class="input-group">
+          <button @click="toggleExpandCollapseAll" class="expand-collapse-button">{{ allExpanded ? '−' : '+' }}</button>
           <input v-model="newTodoTitle" placeholder="Title" class="title-input outlined">
           <button @click="addTodo" class="add-button outlined">Add Todo</button>
+
         </div>
       </div>
       <div class="input-row">
@@ -45,6 +47,7 @@ const todos = ref([]);
 const newTodoTitle = ref('');
 const newTodoText = ref('');
 const searchQuery = ref('');
+const allExpanded = ref(false);
 
 const fetchTodos = async () => {
   const response = await axios.get('http://localhost:3000/todos');
@@ -74,6 +77,13 @@ const deleteTodo = async (id) => {
 
 const toggleExpand = (todo) => {
   todo.expanded = !todo.expanded;
+};
+
+const toggleExpandCollapseAll = () => {
+  allExpanded.value = !allExpanded.value;
+  todos.value.forEach(todo => {
+    todo.expanded = allExpanded.value;
+  });
 };
 
 const filteredTodos = computed(() => {
@@ -125,7 +135,7 @@ onMounted(fetchTodos);
   resize: vertical; /* Allow vertical resizing */
 }
 
-.add-button {
+.add-button, .expand-collapse-button {
   margin-left: 1rem;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -135,7 +145,7 @@ onMounted(fetchTodos);
   cursor: pointer;
 }
 
-.add-button:hover {
+.add-button:hover, .expand-collapse-button:hover {
   background-color: #0056b3;
 }
 
@@ -144,7 +154,7 @@ onMounted(fetchTodos);
 }
 
 .outlined-yellow {
-  border: 2px solid gold
+  border: 2px solid rgb(6, 173, 78);
 }
 
 .todo-list {
