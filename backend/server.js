@@ -51,6 +51,7 @@ app.get('/todos', async (req, res) => {
 
 app.post('/todos', async (req, res) => {
   const newTodo = new Todo({
+    title: req.body.title,
     text: req.body.text,
     completed: false,
   });

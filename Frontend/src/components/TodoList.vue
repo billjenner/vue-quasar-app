@@ -4,13 +4,13 @@
     <div class="todo-list">
       <div class="todo-card" v-for="todo in todos" :key="todo._id">
         <div class="todo-header">
-          <input type="checkbox" v-model="todo.completed" @change="updateTodo(todo)">
           <span :class="{ completed: todo.completed }">{{ todo.title }}</span>
         </div>
         <div class="todo-body">
           <p>{{ todo.text }}</p>
         </div>
         <div class="todo-footer">
+          <input type="checkbox" v-model="todo.completed" @change="updateTodo(todo)">
           <button @click="deleteTodo(todo._id)">Delete</button>
         </div>
       </div>
@@ -86,8 +86,10 @@ onMounted(fetchTodos);
 }
 
 .todo-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 0.5rem;
-  text-align: right;
 }
 
 .completed {
