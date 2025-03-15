@@ -1,31 +1,73 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue';
-import TodoList from './components/TodoList.vue';
-</script>
-
 <template>
-    <div id="app">
-    <TodoList />
-  </div>
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated>
+      <q-toolbar>
+  <q-toolbar-title>
+    My App
+  </q-toolbar-title>
+  <q-btn flat :to="{ name: 'Home' }" label="Home" />
+  <router-link :to="{ name: 'Home' }">
+    <q-btn flat label="Home2" />
+  </router-link>
+  <q-btn flat :to="{ name: 'Todos' }" label="Todos" />
+  <router-link :to="{ name: 'Todos' }">
+    <q-btn flat label="Todos2" />
+  </router-link>          
+</q-toolbar>
+    </q-header>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
 </template>
 
-<style scoped>
-#app {
-  width: 96cqmin; /* 98% of the viewport width */
-  height: 98vh; /* 98% of the viewport height */
-  margin: 0 auto; /* Center the div horizontally */
+
+<script>
+import { RouterLink } from 'vue-router';
+
+export default {
+  name: 'App',
+  components: {
+    RouterLink,
+  },
+};
+</script>
+
+<style>
+
+.container {
+  margin: 0 auto;
+  padding: 1rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+header {
+  margin-bottom: 1rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+nav li {
+  display: inline;
+}
+
+nav a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  margin-top: 1rem;
 }
 </style>
