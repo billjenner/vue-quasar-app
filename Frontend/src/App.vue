@@ -34,7 +34,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="sass">
+// $
 
 .container {
   margin: 0 auto;
