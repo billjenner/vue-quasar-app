@@ -24,9 +24,7 @@ app.use(bodyParser.json());
 
 // MongoDB Connection
 // 'mongodb://localhost:27017/todoApp'
-mongoose.connect(process.env.MONGODB_URI || config.connectionString, {
-  useNewUrlParser: true,
-});
+mongoose.connect(process.env.MONGODB_URI || config.connectionString);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

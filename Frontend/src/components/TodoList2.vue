@@ -1,61 +1,83 @@
 <template>
-  <div class="container">
-    <h1>Todo List</h1>
-    <div class="input-container">
-      <div class="input-row">
-        <input v-model="searchQuery" placeholder="Search todos" class="search-input outlined-yellow col-2">
-        <div class="input-group">
-          <input v-model="newTodoTitle" placeholder="Title" class="title-input outlined">
-          <button @click="addTodo" class="add-button outlined">Add Todo</button>
-          <button @click="toggleExpandCollapseAll" class="expand-collapse-button">{{ allExpanded ? '−' : '+' }}</button>
-        </div>
-      </div>
-      <div class="input-row">
-        <textarea v-model="newTodoText" placeholder="Text" class="text-input outlined" rows="2" @keyup.enter="addTodo"></textarea>
-      </div>
-    </div>
-    <div class="todo-list">
-      <div class="todo-card" v-for="todo in notDoneTodos" :key="todo._id">
-        <div class="todo-header">
-          <span :class="{ completed: todo.completed }">{{ todo.title }}</span>
-          <button @click="toggleExpand(todo)">
-            <span v-if="todo.expanded">−</span>
-            <span v-else>+</span>
-          </button>
-        </div>
-        <div v-if="todo.expanded" class="todo-body">
-          <p>{{ todo.text }}</p>
-        </div>
-        <div class="todo-footer">
-          <div class="checkbox-container">
-            <input type="checkbox" v-model="todo.completed" @change="updateTodo(todo)">
-            <label>Done</label>
+  <div class="todo-container">
+    <q-page class="q-pa-md">
+      <div class="text-h4 q-mb-md">Todo List</div>
+      
+      <div class="row q-col-gutter-md q-mt-md">
+        <div class="col-12">
+          <div class="row q-col-gutter-md">
+            <div v-for="todo in notCompletedTodos" :key="todo._id" class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <q-card>
+                <q-card-section>
+                  <div class="row items-center justify-between">
+                    <div :class="{ 'text-strike': todo.completed }">{{ todo.title }}</div>
+                    <q-btn flat round :icon="todo.expanded ? 'remove' : 'add'" @click="toggleExpand(todo)" />
+                  </div>
+                </q-card-section>
+
+                <q-slide-transition>
+                  <q-card-section v-show="todo.expanded">
+                    <p>{{ todo.text }}</p>
+                  </q-card-section>
+                </q-slide-transition>
+
+                <q-card-actions align="between">
+                  <q-checkbox v-model="todo.completed" label="Completed" @update:model-value="updateTodo(todo)" />
+                  <q-btn flat color="negative" icon="delete" @click="deleteTodo(todo._id)" />
+                </q-card-actions>
+              </q-card>
+            </div>
           </div>
-          <button @click="deleteTodo(todo._id)">Delete</button>
         </div>
       </div>
-    </div>
-    <div class="todo-list done-list">
-      <div class="todo-card" v-for="todo in doneTodos" :key="todo._id">
-        <div class="todo-header">
-          <span :class="{ completed: todo.completed }">{{ todo.title }}</span>
-          <button @click="toggleExpand(todo)">
-            <span v-if="todo.expanded">−</span>
-            <span v-else>+</span>
-          </button>
+
+      <div class="text-h6 q-mt-xl q-mb-md">Completed Todos</div>
+      <div class="row q-col-gutter-md">
+        <div v-for="todo in completedTodos" :key="todo._id" class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <q-card>
+            <q-card-section>
+              <div class="row items-center justify-between">
+                <div :class="{ 'text-strike': todo.completed }">{{ todo.title }}</div>
+                <q-btn flat round :icon="todo.expanded ? 'remove' : 'add'" @click="toggleExpand(todo)" />
+              </div>
+            </q-card-section>
+
+            <q-slide-transition>
+              <q-card-section v-show="todo.expanded">
+                <p>{{ todo.text }}</p>
+              </q-card-section>
+            </q-slide-transition>
+
+            <q-card-actions align="between">
+              <q-checkbox v-model="todo.completed" label="Completed" @update:model-value="updateTodo(todo)" />
+              <q-btn flat color="negative" icon="delete" @click="deleteTodo(todo._id)" />
+            </q-card-actions>
+          </q-card>
         </div>
-        <div v-if="todo.expanded" class="todo-body">
-          <p>{{ todo.text }}</p>
-        </div>
-        <div class="todo-footer">
-          <div class="checkbox-container">
-            <input type="checkbox" v-model="todo.completed" @change="updateTodo(todo)">
-            <label>Done</label>
+      </div>
+    </q-page>
+
+    <q-footer elevated class="bg-white text-black">
+      <q-toolbar>
+        <q-toolbar-title>
+          <div class="q-pa-md">
+            <div class="row q-col-gutter-md q-mb-md">
+              <q-input v-model="searchQuery" placeholder="Search todos" outlined class="col-4" bg-color="yellow-1">
+                <template v-slot:prepend>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+              <div class="col row q-gutter-x-md">
+                <q-input v-model="newTodoTitle" placeholder="Title" outlined class="col" />
+                <q-btn color="primary" label="Add Todo" @click="addTodo" />
+                <q-btn :icon="allExpanded ? 'remove' : 'add'" flat round @click="toggleExpandCollapseAll" />
+              </div>
+            </div>
+            <q-input v-model="newTodoText" type="textarea" placeholder="Text" outlined rows="2" @keyup.enter="addTodo" />
           </div>
-          <button @click="deleteTodo(todo._id)">Delete</button>
-        </div>
-      </div>
-    </div>
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-footer>
   </div>
 </template>
 
@@ -113,11 +135,11 @@ const filteredTodos = computed(() => {
   );
 });
 
-const notDoneTodos = computed(() => {
+const notCompletedTodos = computed(() => {
   return filteredTodos.value.filter(todo => !todo.completed);
 });
 
-const doneTodos = computed(() => {
+const completedTodos = computed(() => {
   return filteredTodos.value.filter(todo => todo.completed);
 });
 
@@ -190,7 +212,7 @@ onMounted(fetchTodos);
   gap: 1rem;
 }
 
-.done-list {
+.completed-list {
   margin-top: 2rem; /* Add space between the two lists */
 }
 

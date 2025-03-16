@@ -30,7 +30,7 @@
         <div class="todo-footer">
           <div class="checkbox-container">
             <input type="checkbox" v-model="todo.completed" @change="updateTodo(todo)">
-            <label>Done</label>
+            <label>Completed</label>
           </div>
           <button @click="deleteTodo(todo._id)">Delete</button>
         </div>

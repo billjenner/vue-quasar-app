@@ -53,7 +53,7 @@ export default defineComponent({
 }
 
 .q-toolbar {
-  color: rgb(190, 198, 206) !important;
+  color: rgb(200, 208, 216) !important;
   padding: 0 20px;
   
   .q-toolbar-title {
