@@ -1,29 +1,32 @@
 <template>
   <div class="todo-container">
-    <q-page class="q-pa-md">
+    <div class="content-wrapper">
       <div class="text-h4 q-mb-md">Todo List</div>
       
       <div class="row q-col-gutter-md q-mt-md">
         <div class="col-12">
           <div class="row q-col-gutter-md">
-            <div v-for="todo in notCompletedTodos" :key="todo._id" class="col-12 col-sm-6 col-md-4 col-lg-3">
-              <q-card>
-                <q-card-section>
-                  <div class="row items-center justify-between">
+            <div v-for="todo in store.notCompletedTodos" :key="todo._id" class="col-12 col-sm-6 col-md-4 col-lg-2">
+              <q-card class="full-height">
+                <q-card-section class="q-pa-none">
+                  <div class="row items-center justify-between q-px-sm q-py-xs">
                     <div :class="{ 'text-strike': todo.completed }">{{ todo.title }}</div>
-                    <q-btn flat round :icon="todo.expanded ? 'remove' : 'add'" @click="toggleExpand(todo)" />
+                    <q-btn flat round dense :icon="todo.expanded ? 'remove' : 'add'" @click="store.toggleExpand(todo)" />
                   </div>
                 </q-card-section>
 
                 <q-slide-transition>
-                  <q-card-section v-show="todo.expanded">
-                    <p>{{ todo.text }}</p>
+                  <q-card-section v-show="todo.expanded" class="q-pa-none">
+                    <p class="q-px-sm q-py-xs">{{ todo.text }}</p>
                   </q-card-section>
                 </q-slide-transition>
 
-                <q-card-actions align="between">
-                  <q-checkbox v-model="todo.completed" label="Completed" @update:model-value="updateTodo(todo)" />
-                  <q-btn flat color="negative" icon="delete" @click="deleteTodo(todo._id)" />
+                <q-card-actions align="between" class="q-pa-none">
+                  <div class="row items-center q-px-sm q-py-xs full-width">
+                    <q-checkbox v-model="todo.completed" label="Completed" dense @update:model-value="store.updateTodo(todo)" />
+                    <q-space />
+                    <q-btn flat dense color="negative" icon="delete" @click="store.deleteTodo(todo._id)" />
+                  </div>
                 </q-card-actions>
               </q-card>
             </div>
@@ -33,48 +36,54 @@
 
       <div class="text-h6 q-mt-xl q-mb-md">Completed Todos</div>
       <div class="row q-col-gutter-md">
-        <div v-for="todo in completedTodos" :key="todo._id" class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <q-card>
-            <q-card-section>
-              <div class="row items-center justify-between">
+        <div v-for="todo in store.completedTodos" :key="todo._id" class="col-12 col-sm-6 col-md-4 col-lg-2">
+          <q-card class="full-height">
+            <q-card-section class="q-pa-none">
+              <div class="row items-center justify-between q-px-sm q-py-xs">
                 <div :class="{ 'text-strike': todo.completed }">{{ todo.title }}</div>
-                <q-btn flat round :icon="todo.expanded ? 'remove' : 'add'" @click="toggleExpand(todo)" />
+                <q-btn flat round dense :icon="todo.expanded ? 'remove' : 'add'" @click="store.toggleExpand(todo)" />
               </div>
             </q-card-section>
 
             <q-slide-transition>
-              <q-card-section v-show="todo.expanded">
-                <p>{{ todo.text }}</p>
+              <q-card-section v-show="todo.expanded" class="q-pa-none">
+                <p class="q-px-sm q-py-xs">{{ todo.text }}</p>
               </q-card-section>
             </q-slide-transition>
 
-            <q-card-actions align="between">
-              <q-checkbox v-model="todo.completed" label="Completed" @update:model-value="updateTodo(todo)" />
-              <q-btn flat color="negative" icon="delete" @click="deleteTodo(todo._id)" />
+            <q-card-actions align="between" class="q-pa-none">
+              <div class="row items-center q-px-sm q-py-xs full-width">
+                <q-checkbox v-model="todo.completed" label="Completed" dense @update:model-value="store.updateTodo(todo)" />
+                <q-space />
+                <q-btn flat dense color="negative" icon="delete" @click="store.deleteTodo(todo._id)" />
+              </div>
             </q-card-actions>
           </q-card>
         </div>
       </div>
-    </q-page>
+    </div>
 
     <q-footer elevated class="bg-white text-black">
       <q-toolbar>
+        <q-btn flat round dense :icon="footerExpanded ? 'expand_more' : 'expand_less'" @click="footerExpanded = !footerExpanded" />
         <q-toolbar-title>
-          <div class="q-pa-md">
-            <div class="row q-col-gutter-md q-mb-md">
-              <q-input v-model="searchQuery" placeholder="Search todos" outlined class="col-4" bg-color="yellow-1">
-                <template v-slot:prepend>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
-              <div class="col row q-gutter-x-md">
-                <q-input v-model="newTodoTitle" placeholder="Title" outlined class="col" />
-                <q-btn color="primary" label="Add Todo" @click="addTodo" />
-                <q-btn :icon="allExpanded ? 'remove' : 'add'" flat round @click="toggleExpandCollapseAll" />
+          <q-slide-transition>
+            <div v-show="footerExpanded" class="q-pa-md">
+              <div class="row q-col-gutter-md q-mb-md">
+                <q-input v-model="store.searchQuery" placeholder="Search todos" outlined class="col-4" bg-color="yellow-1">
+                  <template v-slot:prepend>
+                    <q-icon name="search" />
+                  </template>
+                </q-input>
+                <div class="col row q-gutter-x-md">
+                  <q-input v-model="store.newTodoTitle" placeholder="Title" outlined class="col" />
+                  <q-btn color="primary" label="Add Todo" @click="store.addTodo" />
+                  <q-btn :icon="store.allExpanded ? 'remove' : 'add'" flat round @click="store.toggleExpandCollapseAll" />
+                </div>
               </div>
+              <q-input v-model="store.newTodoText" type="textarea" placeholder="Text" outlined rows="2" @keyup.enter="store.addTodo" />
             </div>
-            <q-input v-model="newTodoText" type="textarea" placeholder="Text" outlined rows="2" @keyup.enter="addTodo" />
-          </div>
+          </q-slide-transition>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -82,73 +91,26 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
+import { onMounted, ref } from 'vue';
+import { useTodoStore } from '../stores/todoStore';
 
-const todos = ref([]);
-const newTodoTitle = ref('');
-const newTodoText = ref('');
-const searchQuery = ref('');
-const allExpanded = ref(false);
+const store = useTodoStore();
+const footerExpanded = ref(true);
 
-const fetchTodos = async () => {
-  const response = await axios.get('http://localhost:3000/todos');
-  todos.value = response.data.map(todo => ({ ...todo, expanded: false }));
-};
-
-const addTodo = async () => {
-  if (newTodoTitle.value.trim() === '' || newTodoText.value.trim() === '') return;
-  const response = await axios.post('http://localhost:3000/todos', {
-    title: newTodoTitle.value,
-    text: newTodoText.value,
-    completed: false
-  });
-  todos.value.push({ ...response.data, expanded: false });
-  newTodoTitle.value = '';
-  newTodoText.value = '';
-};
-
-const updateTodo = async (todo) => {
-  await axios.put(`http://localhost:3000/todos/${todo._id}`, todo);
-};
-
-const deleteTodo = async (id) => {
-  await axios.delete(`http://localhost:3000/todos/${id}`);
-  todos.value = todos.value.filter(todo => todo._id !== id);
-};
-
-const toggleExpand = (todo) => {
-  todo.expanded = !todo.expanded;
-};
-
-const toggleExpandCollapseAll = () => {
-  allExpanded.value = !allExpanded.value;
-  todos.value.forEach(todo => {
-    todo.expanded = allExpanded.value;
-  });
-};
-
-const filteredTodos = computed(() => {
-  return todos.value.filter(todo => 
-    todo.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    todo.text.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+onMounted(() => {
+  store.fetchTodos();
 });
-
-const notCompletedTodos = computed(() => {
-  return filteredTodos.value.filter(todo => !todo.completed);
-});
-
-const completedTodos = computed(() => {
-  return filteredTodos.value.filter(todo => todo.completed);
-});
-
-onMounted(fetchTodos);
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
+.todo-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 100%;
 }
 
 .input-container {
@@ -220,10 +182,10 @@ onMounted(fetchTodos);
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 1rem;
-  width: 200px;
+  height: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  word-wrap: break-word; /* Ensure long words break and wrap */
-  word-break: break-word; /* Ensure long words break and wrap */
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .todo-header {

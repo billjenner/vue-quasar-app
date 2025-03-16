@@ -60,4 +60,29 @@ nav {
 
 main {
   margin-top: 1rem;
+}
+
+// Todo card styles
+.q-card {
+  .q-card__section {
+    min-height: 0;
+  }
+
+  .q-card__actions {
+    min-height: 0;
+  }
+
+  .q-checkbox {
+    margin-right: 8px;
+  }
+
+  .q-btn {
+    min-height: 32px;
+    padding: 0 8px;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.4;
+  }
 } 

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouterLink } from 'vue-router';
 import { createApp } from 'vue';
 import { Quasar } from 'quasar';
 import router from './router';
+import { createPinia } from 'pinia';
 
 import './style.css';
 
@@ -17,13 +18,16 @@ import 'quasar/src/css/index.sass';
 // and placed in same folder as main.js
 import App from './App.vue';
 
-const myApp = createApp(App);
-myApp.component('RouterLink', RouterLink);
-myApp.use(router);
+const app = createApp(App);
+const pinia = createPinia();
 
-myApp.use(Quasar, {
+app.component('RouterLink', RouterLink);
+app.use(pinia);
+app.use(router);
+
+app.use(Quasar, {
   plugins: {}, // import Quasar plugins and add here
 });
 
 // Assumes you have a <div id="app"></div> in your index.html
-myApp.mount('#app');
+app.mount('#app');
