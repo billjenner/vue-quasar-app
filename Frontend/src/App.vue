@@ -62,8 +62,9 @@ export default defineComponent({
 }
 
 .q-toolbar-title {
-  font-weight: bold !important;
+  font-weight: 900 !important;
   font-size: 2rem !important;
+  font-family: Impact, sans-serif !important;
 }
 
 .container {
