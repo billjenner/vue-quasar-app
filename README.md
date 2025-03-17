@@ -1,6 +1,4 @@
-# Vue 3 + Vite
-
-# This Todo App is built using Vue 3, Pinia, Quasar, and MongoDB.
+# This Todo App is built using Vue 3, Vite, Pinia, Quasar, Vue Router, and MongoDB.
 
 ![Todo Application](Frontend/src/assets/TodoApplication.png)
 
