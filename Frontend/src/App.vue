@@ -3,7 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title class="text-left">
-          My App
+          To Do List
         </q-toolbar-title>
         <q-space />
         <menu-a v-if="currentMenu === 'A'" @switch-menu="switchMenu" />
