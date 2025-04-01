@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../pages/Home.vue';
 import Todos from '../pages/Todos.vue';
 import Todos2 from '../components/TodoList2.vue';
+import TodoGrid from '../components/TodoGrid.vue';
 
 const routes = [
   {
@@ -18,7 +19,12 @@ const routes = [
     path: '/todos2',
     name: 'Todos2',
     component: Todos2,
-  }, // ...existing routes...
+  },
+  {
+    path: '/todoGrid',
+    name: 'TodoGrid',
+    component: TodoGrid,
+  }, //// ...existing routes...
 ];
 
 const router = createRouter({
