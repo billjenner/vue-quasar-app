@@ -3,6 +3,7 @@ import Home from '../pages/Home.vue';
 import Todos from '../pages/Todos.vue';
 import Todos2 from '../components/TodoList2.vue';
 import TodoGrid from '../components/TodoGrid.vue';
+import TodoEdit from '../components/TodoEdit.vue';
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/todoGrid',
     name: 'TodoGrid',
     component: TodoGrid,
+  },
+  {
+    path: '/todo-edit/:id',
+    name: 'todo-edit',
+    component: TodoEdit,
   }, //// ...existing routes...
 ];
 
