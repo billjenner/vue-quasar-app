@@ -46,6 +46,22 @@
         </q-tr>
       </template>
     </q-table>
+
+    <q-dialog v-model="showAddTodoDialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Add New Todo</div>
+        </q-card-section>
+        <q-card-section>
+          <q-input v-model="store.newTodoTitle" label="Title" />
+          <q-input v-model="store.newTodoText" label="Text" type="textarea" />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn flat label="Add Todo" color="primary" @click="store.addTodo" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>    
   </q-page>
 </template>
 
@@ -87,8 +103,17 @@ const pagination = ref({
   rowsPerPage: 10,
 });
 const showAddTodoDialog = ref(false);
+const newTodoTitle = ref('');
+const newTodoText = ref('');
 
 onMounted(() => {
   store.fetchTodos();
 });
+
+function addTodo() {
+  store.addTodo({ title: newTodoTitle.value, text: newTodoText.value });
+  newTodoTitle.value = '';
+  newTodoText.value = '';
+  showAddTodoDialog.value = false;
+}
 </script>
