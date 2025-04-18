@@ -27,12 +27,6 @@
         <q-tr :props="props">
           <q-td key="title" :props="props">
             {{ props.row.title }}
-            <q-btn
-              icon="edit"
-              size="sm"
-              color="primary"
-              :to="{ name: 'todo-edit', params: { id: props.row._id } }"
-            />
           </q-td>
           <q-td key="text" :props="props">
             {{ props.row.text }}
@@ -40,6 +34,21 @@
           <q-td key="completed" :props="props">
             <q-checkbox v-model="props.row.completed" dense />
           </q-td>
+
+
+
+
+          <q-td key="edit" :props="props">
+            <q-btn
+              icon="edit"
+              size="sm"
+              color="primary"
+              :to="{ name: 'todo-edit', params: { id: props.row._id } }"
+            />
+          </q-td>
+
+
+
           <q-td key="actions" :props="props">
             <q-btn flat dense color="negative" icon="delete" @click="store.deleteTodo(props.row._id)" />
           </q-td>

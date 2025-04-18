@@ -12,6 +12,7 @@
     </q-header>
 
     <q-page-container>
+      <p>fddfsafdsdsffdsfdsfsdfsdafdsfdsfdsfdsdfs</p>
       <router-view />
     </q-page-container>
   </q-layout>
@@ -43,6 +44,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+
 // Custom button color
 .q-btn {
   color: rgb(256, 128, 64) !important;
@@ -68,19 +70,17 @@ export default defineComponent({
 }
 
 .container {
+  height: 100%;
+
   margin: 0 auto;
   padding: 1rem;
 }
 
-header {
-  margin-bottom: 1rem;
-}
 
 nav ul {
   list-style: none;
   padding: 0;
   display: flex;
-  gap: 1rem;
 }
 
 nav li {
@@ -94,9 +94,5 @@ nav a {
 
 nav a:hover {
   text-decoration: underline;
-}
-
-main {
-  margin-top: 1rem;
 }
 </style>

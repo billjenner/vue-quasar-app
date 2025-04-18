@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../pages/Home.vue';
+import CommentsAndTags from '../pages/CommentsAndTags.vue';
 import Todos from '../pages/Todos.vue';
 import Todos2 from '../components/TodoList2.vue';
 import TodoGrid from '../components/TodoGrid.vue';
@@ -10,6 +11,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/commentsAndTags',
+    name: 'CommentsAndTags',
+    component: CommentsAndTags,
   },
   {
     path: '/todos',
