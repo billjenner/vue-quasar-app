@@ -1,30 +1,40 @@
 <template>
   <q-page>
-    <!-- Hashtag filter -->
+    <h4>Comments Filters</h4>
+    <div class="row">
+      <div class="col-2 q-pa-md">
+        <q-select
+          filled
+          v-model="selectedHashtags"
+          multiple
+          :options="hashtags"
+          use-chips
+          stack-label
+          label="Select hashtags"
+          label-class="text-secondary"
+          class="rounded"
+          @update:model-value="updateFilteredComments"
+          :options-dense="true"
+        />
+        <q-separator class="q-mt-md q-mb-md" />
 
-
-    <div>
-      <h6>All Hashtags</h6>
-      <q-chip v-for="tag in hashtags" :key="tag.value">{{ tag.label }}<span class="text-accent text-weight-bold q-ml-xs">({{ tag.count }})</span></q-chip>
-      <q-select
-        filled
-        v-model="selectedHashtags"
-        multiple
-        :options="hashtags"
-        use-chips
-        stack-label
-        label="Select hashtags"
-        @update:model-value="updateFilteredComments"
-      />
+        <div class="row flex justify-start q-gutter-xs">
+        <q-chip v-for="tag in hashtags" :key="tag.value">{{ tag.label }}<span class="text-accent text-weight-bold q-ml-xs">({{ tag.count }})</span></q-chip>
       </div>
-
+    </div>
+      <div class="col-10 ml-2">
     <!-- Add a new comment -->
-    <div>
-      <q-input v-model="newCommentText" placeholder="Enter a new comment" />
-      <q-btn label="Add Comment" @click="addComment" />
+    <div class="row">
+      <div class="col-10">
+        <q-input v-model="newCommentText" placeholder="Enter a new comment" />
+
+      </div>
+      <div class="col-2">
+        <q-btn label="Add Comment" @click="addComment" />
+      </div>
     </div>
 
-    <!-- Comments list -->
+    <div class="q-mt-xl">    <!-- Comments list -->
     <q-list>
       <q-item v-for="comment in filteredComments" :key="comment.id">
         <q-item-section class="text-left">
@@ -61,6 +71,9 @@
         </q-item-section>
       </q-item>
     </q-list>
+  </div>
+</div>
+</div>
 
 
   </q-page>
@@ -194,5 +207,18 @@ export default {
 Insert
 .q-list {
   justify-content: flex-start;
+}
+h4 {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 12px;
+}
+
+.q-page {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 </style>
