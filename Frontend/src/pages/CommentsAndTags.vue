@@ -3,6 +3,11 @@
     <!-- Hashtag filter -->
 
 
+    <div>
+      <h6>All Hashtags</h6>
+      <q-chip v-for="tag in hashtags" :key="tag">{{ tag }}</q-chip>
+    </div>
+
     <!-- Add a new comment -->
     <div>
       <q-input v-model="newCommentText" placeholder="Enter a new comment" />
@@ -12,17 +17,28 @@
     <!-- Comments list -->
     <q-list>
       <q-item v-for="comment in filteredComments" :key="comment.id">
-        <q-item-section>
+        <q-item-section class="text-left">
           <div>{{ comment.text }}</div>
-          <q-input
-            v-model="newHashtags[comment.id]"
-            outlined
-            clearable
-            placeholder="Enter a hashtag and press Enter"
-            @keyup.enter="addHashtagToComment(comment.id)"
-          />
+          <q-dialog v-model="showTagModalVisible[comment.id]">
+            <q-card>
+              <q-card-section>
+                <div>Add tags:</div>
+                <q-input
+                  v-model="newHashtags[comment.id]"
+                  outlined
+                  clearable
+                  placeholder="Enter a hashtag and press Enter"
+                  @keyup.enter="addHashtagToComment(comment.id)"
+                />
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat label="Cancel" color="primary" v-close-popup />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
 
           <div>
+            <q-btn @click="showTagModal(comment.id)" flat size="sm" class="col-6">Click to add tags...</q-btn>
             <q-chip
               v-for="tag in comment.hashtags"
               :key="tag"
@@ -37,10 +53,7 @@
     </q-list>
 
     <!-- List all hashtags -->
-    <div>
-      <h3>All Hashtags</h3>
-      <q-chip v-for="tag in hashtags" :key="tag">{{ tag }}</q-chip>
-    </div>
+
   </q-page>
 </template>
 
@@ -61,7 +74,8 @@ export default {
       filteredComments: [],
       filterAllTags: false, // Toggle between "all tags" and "any tags" filter
       newCommentText: '', // To store new comment text
-      newHashtags: {}, // Stores input values keyed by comment ID
+      newHashtags: {}, 
+      showTagModalVisible: {}// Stores input values keyed by comment ID
     }
   },
 
@@ -74,6 +88,7 @@ export default {
           hashtags: [],
         })
 
+            // Clear input for that specific comment
         this.newCommentText = ''
         this.filteredComments = this.comments // Refresh the comment list
       }
@@ -91,10 +106,7 @@ export default {
             this.hashtags.push(tag)
           }
         }
-
-        // Clear input for that specific comment
-        this.$set(this.newHashtags, commentId, '')
-
+        this.newHashtags[commentId] = ''
         this.updateHashtags();
       }
     },
@@ -114,15 +126,24 @@ export default {
         }
         this.filteredComments = this.comments // Refresh the filtered list
 
+        // Clear input for that specific comment
+        setTimeout(() => {
+          this.newHashtags[commentId] = ''
+        }, 0)
+
         this.updateHashtags();
       }
+    },
+
+
+    showTagModal(commentId) {
+      this.showTagModalVisible[commentId] = true
     },
 
     updateHashtags() {
       const distinctHashtags = [...new Set(this.comments.flatMap(comment => comment.hashtags))];
       this.hashtags = distinctHashtags;
     },
-
     resetAndRebuildHashtags() {
       this.hashtags = Array.from(new Set(this.comments.flatMap(comment => comment.hashtags)));
     },
@@ -130,7 +151,16 @@ export default {
 
   mounted() {
     this.filteredComments = this.comments,
-    this.resetAndRebuildHashtags()
+    this.$nextTick(() => {
+      this.resetAndRebuildHashtags()
+    })
   },
 }
 </script>
+
+<style>
+Insert
+.q-list {
+  justify-content: flex-start;
+}
+</style>

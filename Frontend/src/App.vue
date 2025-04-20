@@ -12,7 +12,6 @@
     </q-header>
 
     <q-page-container>
-      <p>fddfsafdsdsffdsfdsfsdfsdafdsfdsfdsfdsdfs</p>
       <router-view v-slot="{ Component, route }">
         <!-- Use a custom transition or fallback to `fade` -->
         <transition name="fade" mode="out-in">
