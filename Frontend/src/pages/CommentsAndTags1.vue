@@ -5,7 +5,7 @@
 
     <div>
       <h6>All Hashtags</h6>
-      <q-chip v-for="tag in hashtags" :key="tag.value">{{ tag.label }}<span class="text-accent text-weight-bold q-ml-xs">({{ tag.count }})</span></q-chip>
+      <q-chip v-for="tag in hashtags" :key="tag.label">{{ tag.label }} ({{ tag.count }})</q-chip>
       <q-select
         filled
         v-model="selectedHashtags"
@@ -15,8 +15,8 @@
         stack-label
         label="Select hashtags"
         @update:model-value="updateFilteredComments"
-      />
-      </div>
+        />
+    </div>
 
     <!-- Add a new comment -->
     <div>
@@ -62,6 +62,7 @@
       </q-item>
     </q-list>
 
+    <!-- List all hashtags -->
 
   </q-page>
 </template>
@@ -72,19 +73,21 @@ export default {
     return {
       comments: [
         { id: 1, text: 'This is a comment', hashtags: ['tag2', 'tag1'] },
-        { id: 2, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate impedit eveniet deserunt, quam atque nisi deleniti esse perferendis commodi voluptas eaque autem quidem quibusdam, corrupti, ratione facilis fugiat molestias distinctio dolores aliquam. Asperiores maiores eligendi quas ducimus quam mollitia ad eius nisi. Repellat hic officiis ea exercitationem natus vero quos!', hashtags: ['tag3', 'tag4'] },
-        { id: 3, text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur, pariatur! Repudiandae tenetur ea maxime voluptatem saepe commodi adipisci dignissimos molestias?', hashtags: ['tag11', 'tag4'] },
-        { id: 4, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. ', hashtags: ['tag5']},
-        { id: 5, text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus, reprehenderit cumque?', hashtags: ['tag6'] },
-        { id: 6, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quas, fuga neque voluptas et, a quam impedit obcaecati maiores repellat facere amet dolore tempora ad vel iusto fugiat temporibus laborum dicta praesentium ducimus corrupti reprehenderit animi voluptate? Optio ex quia accusamus labore eveniet nesciunt porro doloremque consequuntur sapiente, sint ducimus perspiciatis. Aspernatur vitae optio alias velit ea, atque corporis suscipit aliquam doloribus! Quos quae sit vel accusamus aliquam quam totam, magnam omnis id facere, dolorum atque asperiores nulla unde praesentium vitae repellat minus, voluptas mollitia ipsa? Quisquam officiis hic sint, corrupti nihil amet consequuntur, illum incidunt earum aperiam quibusdam modi rerum tenetur ullam alias aut voluptatibus ea, in exercitationem deserunt consectetur laboriosam, nihil iure error dolor fuga reiciendis enim! Ipsam, necessitatibus labore autem unde, obcaecati esse corrupti debitis exercitationem enim aspernatur aliquid. Sed fugiat officia expedita assumenda nisi neque quis eligendi repellat, architecto praesentium placeat eos eveniet! Quaerat temporibus sapiente aliquid distinctio ducimus sunt officiis harum, alias mollitia aliquam perspiciatis animi vero fuga explicabo cupiditate molestiae eius. Molestiae tempora, ab explicabo quisquam quia eius dolorem odio aperiam blanditiis ipsum soluta totam aut consectetur tempore necessitatibus ex quaerat nobis voluptas. Eveniet praesentium harum, rem dolor placeat vitae fugit.', hashtags: ['tag6', 'tag7', 'tag8'] },
+        { id: 2, text: 'Another comment', hashtags: ['tag3', 'tag4'] },
+        { id: 3, text: 'Another comment', hashtags: ['tag11', 'tag4'] },
+        { id: 4, text: 'Another comment', hashtags: ['tag5']},
+        { id: 5, text: 'Another comment', hashtags: ['tag6'] },
+        { id: 6, text: 'Another comment', hashtags: ['tag6', 'tag7', 'tag8'] },
       ],
-      hashtags: {}, // Global hashtag list
+      hashtags: [
+        { label: 'tag1', count: 2 },
+        { label: 'tag2', count: 1 }
+      ], // Global hashtag list
       selectedFilter: [],
       filteredComments: [],
       filterAllTags: false, // Toggle between "all tags" and "any tags" filter
       newCommentText: '', // To store new comment text
       newHashtags: {}, 
-      newHashtags2: {},
       showTagModalVisible: {},
       selectedHashtags: [],// Stores input values keyed by comment ID
     }
@@ -113,8 +116,8 @@ export default {
         if (comment && !comment.hashtags.includes(tag)) {
           comment.hashtags.push(tag)
 
-          if (!this.hashtags.includes(tag)) {
-            this.hashtags.push(tag)
+          if (!this.hashtags.some((t) => t.label === tag)) {
+            this.hashtags.push({ label: tag, count: 1 })
           }
         }
         this.newHashtags[commentId] = ''
@@ -151,14 +154,10 @@ export default {
         this.filteredComments = this.comments;
       } else {
         this.filteredComments = this.comments.filter(comment => {
-          debugger;
-          var x = comment.hashtags.some(tag => this.selectedHashtags.includes(tag));
-          const selectedHashtagValues = this.selectedHashtags.map(tag => tag.value);
-          return comment.hashtags.some(tag => selectedHashtagValues.includes(tag));
+          return comment.hashtags.some(tag => this.selectedHashtags.includes(tag));
         });
       }
     },
-
     showTagModal(commentId) {
       this.showTagModalVisible[commentId] = true
     },
@@ -174,18 +173,13 @@ export default {
           }
         });
       });
-      this.hashtags = Object.keys(hashtagCounts).map(tag => ({
-        label: tag,
-        value: tag,
-        count: hashtagCounts[tag],
-      }));
-    }
-  },
+      this.hashtags = Object.keys(hashtagCounts).map(tag => ({ label: tag, count: hashtagCounts[tag] }));
+      console.log(this.hashtags);
+    },
+
   mounted() {
     this.filteredComments = this.comments,
-    this.$nextTick(() => {
-      this.updateHashtags()
-    })
+    this.updateHashtags();
   },
 }
 </script>
