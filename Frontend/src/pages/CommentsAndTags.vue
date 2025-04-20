@@ -3,14 +3,14 @@
     <h4>Comments Filters</h4>
     <div class="row">
       <div class="q-pa-md">
-        <div class="q-gutter-y-md column" style="max-width: 300px">
+        <div class="q-gutter-y-md column" style="min-width: 168px">
           <q-select
             clearable
             filled
-            color="purple-12"
             v-model="selectedCategory"
             :options="categories"
             label="Filter by Category"
+            @update:model-value="updateFilteredCommentsByCategory"
           />
         </div>
       </div>
@@ -26,9 +26,8 @@
           use-chips
           stack-label
           label="Select hashtags"
-          label-class="text-secondary"
           class="rounded"
-          @update:model-value="updateFilteredComments"
+          @update:model-value="updateFilteredCommentsByTag"
           :options-dense="true"
         />
         <q-separator class="q-mt-md q-mb-md" />
@@ -44,7 +43,7 @@
         <q-input v-model="newCommentText" placeholder="Enter a new comment" />
 
       </div>
-      <div class="col-2">
+      <div class="col-2 ml-4">
         <q-select
           outlined
           v-model="newCommentCategory"
@@ -106,6 +105,7 @@
 export default {
   data() {
     return {
+      selectedCategory: null,
       newCommentCategory: null,
       categories: [
         { label: 'General', value: 'General' },
@@ -199,17 +199,29 @@ export default {
       }
     },
 
-    updateFilteredComments() {
-      if (this.selectedHashtags.length === 0 && !this.selectedCategory) {
+    updateFilteredCommentsByTag() {
+      if (this.selectedHashtags.length === 0) {
         this.filteredComments = this.comments;
       } else {
         this.filteredComments = this.comments.filter(comment => {
-          var x = comment.hashtags.some(tag => this.selectedHashtags.includes(tag));
           const selectedHashtagValues = this.selectedHashtags.map(tag => tag.value);
           return comment.hashtags.some(tag => selectedHashtagValues.includes(tag));
         });
       }
     },
+
+    updateFilteredCommentsByCategory() {
+    if (!this.selectedCategory) {
+      this.filteredComments = this.comments;
+    } else {
+      var z = this.selectedCategory;
+      debugger;
+      this.comments.forEach(comment => { console.log(comment.id); console.log(comment.category); });
+      this.filteredComments = this.comments.filter(comment => {
+        return comment.category === this.selectedCategory.value;
+      });
+    }
+  },
 
     showTagModal(commentId) {
       this.showTagModalVisible[commentId] = true
@@ -234,7 +246,8 @@ export default {
     }
   },
   mounted() {
-    this.filteredComments = this.comments,
+    this.filteredComments = this.comments;
+    this.updateFilteredCommentsByCategory(); // Add this line
     this.$nextTick(() => {
       this.updateHashtags()
     })
