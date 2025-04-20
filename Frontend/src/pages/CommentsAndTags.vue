@@ -2,6 +2,21 @@
   <q-page>
     <h4>Comments Filters</h4>
     <div class="row">
+      <div class="q-pa-md">
+        <div class="q-gutter-y-md column" style="max-width: 300px">
+          <q-select
+            clearable
+            filled
+            color="purple-12"
+            v-model="selectedCategory"
+            :options="categories"
+            label="Filter by Category"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col-2 q-pa-md">
         <q-select
           filled
@@ -25,9 +40,17 @@
       <div class="col-10 ml-2">
     <!-- Add a new comment -->
     <div class="row">
-      <div class="col-10">
+      <div class="col-8">
         <q-input v-model="newCommentText" placeholder="Enter a new comment" />
 
+      </div>
+      <div class="col-2">
+        <q-select
+          outlined
+          v-model="newCommentCategory"
+          :options="categories"
+          label="Select Category"
+        />
       </div>
       <div class="col-2">
         <q-btn label="Add Comment" @click="addComment" />
@@ -83,14 +106,23 @@
 export default {
   data() {
     return {
-      comments: [
-        { id: 1, text: 'This is a comment', hashtags: ['tag2', 'tag1'] },
-        { id: 2, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate impedit eveniet deserunt, quam atque nisi deleniti esse perferendis commodi voluptas eaque autem quidem quibusdam, corrupti, ratione facilis fugiat molestias distinctio dolores aliquam. Asperiores maiores eligendi quas ducimus quam mollitia ad eius nisi. Repellat hic officiis ea exercitationem natus vero quos!', hashtags: ['tag3', 'tag4'] },
-        { id: 3, text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur, pariatur! Repudiandae tenetur ea maxime voluptatem saepe commodi adipisci dignissimos molestias?', hashtags: ['tag11', 'tag4'] },
-        { id: 4, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. ', hashtags: ['tag5']},
-        { id: 5, text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus, reprehenderit cumque?', hashtags: ['tag6'] },
-        { id: 6, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quas, fuga neque voluptas et, a quam impedit obcaecati maiores repellat facere amet dolore tempora ad vel iusto fugiat temporibus laborum dicta praesentium ducimus corrupti reprehenderit animi voluptate? Optio ex quia accusamus labore eveniet nesciunt porro doloremque consequuntur sapiente, sint ducimus perspiciatis. Aspernatur vitae optio alias velit ea, atque corporis suscipit aliquam doloribus! Quos quae sit vel accusamus aliquam quam totam, magnam omnis id facere, dolorum atque asperiores nulla unde praesentium vitae repellat minus, voluptas mollitia ipsa? Quisquam officiis hic sint, corrupti nihil amet consequuntur, illum incidunt earum aperiam quibusdam modi rerum tenetur ullam alias aut voluptatibus ea, in exercitationem deserunt consectetur laboriosam, nihil iure error dolor fuga reiciendis enim! Ipsam, necessitatibus labore autem unde, obcaecati esse corrupti debitis exercitationem enim aspernatur aliquid. Sed fugiat officia expedita assumenda nisi neque quis eligendi repellat, architecto praesentium placeat eos eveniet! Quaerat temporibus sapiente aliquid distinctio ducimus sunt officiis harum, alias mollitia aliquam perspiciatis animi vero fuga explicabo cupiditate molestiae eius. Molestiae tempora, ab explicabo quisquam quia eius dolorem odio aperiam blanditiis ipsum soluta totam aut consectetur tempore necessitatibus ex quaerat nobis voluptas. Eveniet praesentium harum, rem dolor placeat vitae fugit.', hashtags: ['tag6', 'tag7', 'tag8'] },
+      newCommentCategory: null,
+      categories: [
+        { label: 'General', value: 'General' },
+        { label: 'Feedback', value: 'Feedback' },
+        { label: 'Suggestion', value: 'Suggestion' },
+        { label: 'Question', value: 'Question' },
+        { label: 'Idea', value: 'Idea' },
+        { label: 'Discussion', value: 'Discussion' },
       ],
+      comments: [
+  { id: 1, text: 'This is a comment', hashtags: ['tag2', 'tag1'], category: 'General' },
+  { id: 2, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate impedit eveniet deserunt, quam atque nisi deleniti esse perferendis commodi voluptas eaque autem quidem quibusdam, corrupti, ratione facilis fugiat molestias distinctio dolores aliquam. Asperiores maiores eligendi quas ducimus quam mollitia ad eius nisi. Repellat hic officiis ea exercitationem natus vero quos!', hashtags: ['tag3', 'tag4'], category: 'Feedback' },
+  { id: 3, text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur, pariatur! Repudiandae tenetur ea maxime voluptatem saepe commodi adipisci dignissimos molestias?', hashtags: ['tag11', 'tag4'], category: 'Suggestion' },
+  { id: 4, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. ', hashtags: ['tag5'], category: 'Question' },
+  { id: 5, text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus, reprehenderit cumque?', hashtags: ['tag6'], category: 'Idea' },
+  { id: 6, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quas, fuga neque voluptas et, a quam impedit obcaecati maiores repellat facere amet dolore tempora ad vel iusto fugiat temporibus laborum dicta praesentium ducimus corrupti reprehenderit animi voluptate? Optio ex quia accusamus labore eveniet nesciunt porro doloremque consequuntur sapiente, sint ducimus perspiciatis. Aspernatur vitae optio alias velit ea, atque corporis suscipit aliquam doloribus! Quos quae sit vel accusamus aliquam quam totam, magnam omnis id facere, dolorum atque asperiores nulla unde praesentium vitae repellat minus, voluptas mollitia ipsa? Quisquam officiis hic sint, corrupti nihil amet consequuntur, illum incidunt earum aperiam quibusdam modi rerum tenetur ullam alias aut voluptatibus ea, in exercitationem deserunt consectetur laboriosam, nihil iure error dolor fuga reiciendis enim! Ipsam, necessitatibus labore autem unde, obcaecati esse corrupti debitis exercitationem enim aspernatur aliquid. Sed fugiat officia expedita assumenda nisi neque quis eligendi repellat, architecto praesentium placeat eos eveniet! Quaerat temporibus sapiente aliquid distinctio ducimus sunt officiis harum, alias mollitia aliquam perspiciatis animi vero fuga explicabo cupiditate molestiae eius. Molestiae tempora, ab explicabo quisquam quia eius dolorem odio aperiam blanditiis ipsum soluta totam aut consectetur tempore necessitatibus ex quaerat nobis voluptas. Eveniet praesentium harum, rem dolor placeat vitae fugit.', hashtags: ['tag6', 'tag7', 'tag8'], category: 'Discussion' },
+],
       hashtags: {}, // Global hashtag list
       selectedFilter: [],
       filteredComments: [],
@@ -105,16 +137,24 @@ export default {
 
   methods: {
     addComment() {
-      if (this.newCommentText.trim()) {
+      if (this.newCommentText.trim() && this.newCommentCategory) {
         this.comments.push({
           id: this.comments.length + 1,
           text: this.newCommentText.trim(),
           hashtags: [],
+          category: this.newCommentCategory,
         })
 
-            // Clear input for that specific comment
+        // Clear input for that specific comment
         this.newCommentText = ''
+        this.newCommentCategory = null
         this.filteredComments = this.comments // Refresh the comment list
+      } else {
+        // Show an error message if category is not selected
+        this.$q.notify({
+          message: 'Please select a category',
+          color: 'red',
+        })
       }
     },
 
@@ -160,11 +200,10 @@ export default {
     },
 
     updateFilteredComments() {
-      if (this.selectedHashtags.length === 0) {
+      if (this.selectedHashtags.length === 0 && !this.selectedCategory) {
         this.filteredComments = this.comments;
       } else {
         this.filteredComments = this.comments.filter(comment => {
-          debugger;
           var x = comment.hashtags.some(tag => this.selectedHashtags.includes(tag));
           const selectedHashtagValues = this.selectedHashtags.map(tag => tag.value);
           return comment.hashtags.some(tag => selectedHashtagValues.includes(tag));
