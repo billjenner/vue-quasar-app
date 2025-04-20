@@ -2,6 +2,8 @@
 
 ![Todo Application](Frontend/src/assets/TodoApplication.png)
 
+Transitions
+![Transitions](https://router.vuejs.org/guide/advanced/transitions.html)
 
 ## Run backend
 - > Open Terminal Window (power shell)

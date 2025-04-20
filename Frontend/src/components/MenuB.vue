@@ -3,6 +3,7 @@
     <q-btn flat :to="{ name: 'Home' }" label="Home" />
     <q-btn flat :to="{ name: 'Todos' }" label="Todos" />
     <q-btn flat :to="{ name: 'Todos2' }" label="Todos2" />
+    <q-btn flat :to="{ name: 'CommentsAndTags' }" label="CommentsAndTags" />
     <q-btn flat @click="$emit('switchMenu')" label="> Home" />
   </div>
 </template>

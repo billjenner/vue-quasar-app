@@ -13,7 +13,12 @@
 
     <q-page-container>
       <p>fddfsafdsdsffdsfdsfsdfsdafdsfdsfdsfdsdfs</p>
-      <router-view />
+      <router-view v-slot="{ Component, route }">
+        <!-- Use a custom transition or fallback to `fade` -->
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </q-page-container>
   </q-layout>
 </template>
