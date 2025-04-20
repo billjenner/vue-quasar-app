@@ -6,6 +6,16 @@
     <div>
       <h6>All Hashtags</h6>
       <q-chip v-for="tag in hashtags" :key="tag">{{ tag }}</q-chip>
+      <q-select
+        filled
+        v-model="selectedHashtags"
+        multiple
+        :options="hashtags"
+        use-chips
+        stack-label
+        label="Select hashtags"
+        @update:model-value="updateFilteredComments"
+        />
     </div>
 
     <!-- Add a new comment -->
@@ -75,7 +85,8 @@ export default {
       filterAllTags: false, // Toggle between "all tags" and "any tags" filter
       newCommentText: '', // To store new comment text
       newHashtags: {}, 
-      showTagModalVisible: {}// Stores input values keyed by comment ID
+      showTagModalVisible: {},
+      selectedHashtags: [],// Stores input values keyed by comment ID
     }
   },
 
@@ -135,7 +146,15 @@ export default {
       }
     },
 
-
+    updateFilteredComments() {
+      if (this.selectedHashtags.length === 0) {
+        this.filteredComments = this.comments;
+      } else {
+        this.filteredComments = this.comments.filter(comment => {
+          return comment.hashtags.some(tag => this.selectedHashtags.includes(tag));
+        });
+      }
+    },
     showTagModal(commentId) {
       this.showTagModalVisible[commentId] = true
     },
