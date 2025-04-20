@@ -2,16 +2,6 @@
   <q-page>
     <!-- Hashtag filter -->
 
-    <div>
-      <q-select
-        v-model="selectedFilter"
-        :options="hashtags"
-        multiple
-        placeholder="Filter by hashtags"
-      />
-      <q-checkbox v-model="filterAllTags" label="Require all tags to match" />
-      <q-btn label="Apply Filter" @click="applyFilter" />
-    </div>
 
     <!-- Add a new comment -->
     <div>
@@ -61,6 +51,10 @@ export default {
       comments: [
         { id: 1, text: 'This is a comment', hashtags: ['tag2', 'tag1'] },
         { id: 2, text: 'Another comment', hashtags: ['tag3', 'tag4'] },
+        { id: 3, text: 'Another comment', hashtags: ['tag11', 'tag4'] },
+        { id: 4, text: 'Another comment', hashtags: ['tag5']},
+        { id: 5, text: 'Another comment', hashtags: ['tag6'] },
+        { id: 6, text: 'Another comment', hashtags: ['tag6', 'tag7', 'tag8'] },
       ],
       hashtags: ['example', 'quasar', 'vue'], // Global hashtag list
       selectedFilter: [],
@@ -72,20 +66,6 @@ export default {
   },
 
   methods: {
-    applyFilter() {
-      if (this.selectedFilter.length === 0) {
-        this.filteredComments = this.comments
-      } else if (this.filterAllTags) {
-        this.filteredComments = this.comments.filter((comment) =>
-          this.selectedFilter.every((tag) => comment.hashtags.includes(tag))
-        )
-      } else {
-        this.filteredComments = this.comments.filter((comment) =>
-          this.selectedFilter.some((tag) => comment.hashtags.includes(tag))
-        )
-      }
-    },
-
     addComment() {
       if (this.newCommentText.trim()) {
         this.comments.push({
@@ -114,6 +94,8 @@ export default {
 
         // Clear input for that specific comment
         this.$set(this.newHashtags, commentId, '')
+
+        this.updateHashtags();
       }
     },
 
@@ -131,12 +113,24 @@ export default {
           this.hashtags = this.hashtags.filter((t) => t !== tag)
         }
         this.filteredComments = this.comments // Refresh the filtered list
+
+        this.updateHashtags();
       }
+    },
+
+    updateHashtags() {
+      const distinctHashtags = [...new Set(this.comments.flatMap(comment => comment.hashtags))];
+      this.hashtags = distinctHashtags;
+    },
+
+    resetAndRebuildHashtags() {
+      this.hashtags = Array.from(new Set(this.comments.flatMap(comment => comment.hashtags)));
     },
   },
 
   mounted() {
-    this.filteredComments = this.comments
+    this.filteredComments = this.comments,
+    this.resetAndRebuildHashtags()
   },
 }
 </script>
