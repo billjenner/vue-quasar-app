@@ -1,14 +1,35 @@
 <template>
   <!-- Right Drawer -->
-  <q-drawer side="right" v-model="rightDrawerOpen" show-if-above>
-        <q-select
-          clearable
-          filled
-          v-model="selectedCategory"
-          :options="categories"
-          label="Filter by Category"
-          @update:model-value="updateFilteredCommentsByCategory"
-        />
+  <div>
+  <q-drawer
+    side="right"
+    v-model="rightDrawerOpen"
+    :mini="miniDrawer"
+    show-if-above
+    :width="300"
+    :mini-width="70"
+    bordered
+  >
+    <q-toolbar>
+      <q-btn
+        dense
+        flat
+        icon="chevron_right"
+        @click="miniDrawer = !miniDrawer"
+        :class="{ 'rotate-180': miniDrawer }"
+      />
+      <q-toolbar-title v-if="!miniDrawer" class="text-subtitle2">Filters</q-toolbar-title>
+    </q-toolbar>
+
+    <div v-if="!miniDrawer" class="q-pa-sm">
+      <q-select
+        clearable
+        filled
+        v-model="selectedCategory"
+        :options="categories"
+        label="Filter by Category"
+        @update:model-value="updateFilteredCommentsByCategory"
+      />
 
       <q-date 
         v-model="dateRange" 
@@ -18,10 +39,11 @@
         dense
         minimal
         flat
+        class="q-mt-sm"
         @update:model-value="updateFilteredCommentsByDate" 
       />
 
-    <q-select
+      <q-select
         filled
         v-model="selectedHashtags"
         multiple
@@ -29,18 +51,21 @@
         use-chips
         stack-label
         label="Select hashtags"
-        class="rounded"
+        class="rounded q-mt-sm"
         @update:model-value="updateFilteredCommentsByTag"
         :options-dense="true"
       />
+
       <q-separator class="q-mt-md q-mb-md" />
 
       <div class="row flex justify-start q-gutter-xs">
         <q-chip v-for="tag in hashtags" :key="tag.value">{{ tag.label }}<span class="text-accent text-weight-bold q-ml-xs">({{ tag.count }})</span></q-chip>
       </div>
+    </div>
   </q-drawer>
 
-  <q-page>
+
+  <q-page class="full-width">
     <h4>Comments Filters</h4>
     <div class="row">
       <div class="col-8">
@@ -101,13 +126,15 @@
       </q-list>
     </div>
   </q-page>
+</div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      rightDrawerOpen: false,
+      rightDrawerOpen: true,
+      miniDrawer: false,
       selectedCategory: null,
       newCommentCategory: null,
       categories: [
@@ -130,7 +157,7 @@ export default {
         from: null,
         to: null
       },
-      hashtags: {}, // Global hashtag list
+      hashtags: [], // Global hashtag list
       selectedFilter: [],
       filteredComments: [],
       filterAllTags: false, // Toggle between "all tags" and "any tags" filter
@@ -277,11 +304,16 @@ export default {
 }
 </script>
 
-<style>
-Insert
+<style scoped>
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
 .q-list {
   justify-content: flex-start;
 }
+
 h4 {
   margin-top: 0;
   margin-bottom: 0;
@@ -290,9 +322,12 @@ h4 {
 }
 
 .q-page {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  width: 100%;
+  min-width: 0; /* Ensures it doesn't overgrow on flexbox */
+  min-height: 100vh; /* Ensures full height */
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
 }
 </style>
