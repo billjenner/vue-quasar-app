@@ -1,58 +1,50 @@
 <template>
+  <!-- Right Drawer -->
+  <q-drawer side="right" v-model="rightDrawerOpen" show-if-above>
+        <q-select
+          clearable
+          filled
+          v-model="selectedCategory"
+          :options="categories"
+          label="Filter by Category"
+          @update:model-value="updateFilteredCommentsByCategory"
+        />
+
+      <q-date 
+        v-model="dateRange" 
+        mask="YYYY-MM-DD"
+        range 
+        bordered
+        dense
+        minimal
+        flat
+        @update:model-value="updateFilteredCommentsByDate" 
+      />
+
+    <q-select
+        filled
+        v-model="selectedHashtags"
+        multiple
+        :options="hashtags"
+        use-chips
+        stack-label
+        label="Select hashtags"
+        class="rounded"
+        @update:model-value="updateFilteredCommentsByTag"
+        :options-dense="true"
+      />
+      <q-separator class="q-mt-md q-mb-md" />
+
+      <div class="row flex justify-start q-gutter-xs">
+        <q-chip v-for="tag in hashtags" :key="tag.value">{{ tag.label }}<span class="text-accent text-weight-bold q-ml-xs">({{ tag.count }})</span></q-chip>
+      </div>
+  </q-drawer>
+
   <q-page>
     <h4>Comments Filters</h4>
     <div class="row">
-      <div class="q-pa-md">
-        <div class="q-gutter-y-md column" style="min-width: 168px">
-          <q-select
-            clearable
-            filled
-            v-model="selectedCategory"
-            :options="categories"
-            label="Filter by Category"
-            @update:model-value="updateFilteredCommentsByCategory"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="q-pa-md">
-        <q-date 
-          v-model="dateRange" 
-          mask="YYYY-MM-DD"
-          range 
-          @update:model-value="updateFilteredCommentsByDate" 
-        />
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-2 q-pa-md">
-        <q-select
-          filled
-          v-model="selectedHashtags"
-          multiple
-          :options="hashtags"
-          use-chips
-          stack-label
-          label="Select hashtags"
-          class="rounded"
-          @update:model-value="updateFilteredCommentsByTag"
-          :options-dense="true"
-        />
-        <q-separator class="q-mt-md q-mb-md" />
-
-        <div class="row flex justify-start q-gutter-xs">
-        <q-chip v-for="tag in hashtags" :key="tag.value">{{ tag.label }}<span class="text-accent text-weight-bold q-ml-xs">({{ tag.count }})</span></q-chip>
-      </div>
-    </div>
-      <div class="col-10 ml-2">
-    <!-- Add a new comment -->
-    <div class="row">
       <div class="col-8">
         <q-input v-model="newCommentText" placeholder="Enter a new comment" />
-
       </div>
       <div class="col-2 ml-4">
         <q-select
@@ -107,11 +99,7 @@
           </q-item-section>
         </q-item>
       </q-list>
-  </div>
-</div>
-</div>
-
-
+    </div>
   </q-page>
 </template>
 
@@ -119,6 +107,7 @@
 export default {
   data() {
     return {
+      rightDrawerOpen: false,
       selectedCategory: null,
       newCommentCategory: null,
       categories: [
