@@ -61,6 +61,10 @@ button:focus-visible {
   background-color: #430707;
 }
 
+.text-subtitle2 {
+  color: var(--q-accent);
+}
+
 #app {
   max-width: 1280px;
   margin: 0 auto;

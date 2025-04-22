@@ -28,9 +28,12 @@
         v-model="selectedCategory"
         :options="categories"
         label="Filter by Category"
-        @update:model-value="updateFilteredCommentsByCategory"
+        @update:model-value="updateFilteredComments"
       />
 
+      <div class="text-subtitle2 q-mb-xs">
+        From: {{ dateRange.from || '—' }} &nbsp;&nbsp; To: {{ dateRange.to || '—' }}
+      </div>
       <q-date 
         v-model="dateRange" 
         mask="YYYY-MM-DD"
@@ -40,7 +43,7 @@
         minimal
         flat
         class="q-mt-sm"
-        @update:model-value="updateFilteredCommentsByDate" 
+        @update:model-value="updateFilteredComments" 
       />
 
       <q-select
@@ -52,7 +55,7 @@
         stack-label
         label="Select hashtags"
         class="rounded q-mt-sm"
-        @update:model-value="updateFilteredCommentsByTag"
+        @update:model-value="updateFilteredComments"
         :options-dense="true"
       />
 
@@ -69,9 +72,16 @@
     <h4>Comments Filters</h4>
     <div class="row">
       <div class="col-8">
-        <q-input v-model="newCommentText" placeholder="Enter a new comment" />
+        <q-input 
+          v-model="newCommentText" 
+          placeholder="Enter a new comment" 
+          type="textarea"
+          autogrow
+          filled
+          class="highlighted-input"
+        />
       </div>
-      <div class="col-2 ml-4">
+      <div class="col-2 q-ml-md">
         <q-select
           outlined
           v-model="newCommentCategory"
@@ -79,12 +89,15 @@
           label="Select Category"
         />
       </div>
-      <div class="col-2">
+      <div class="col-1 q-ml-md">
         <q-btn label="Add Comment" @click="addComment" />
       </div>
     </div>
 
-    <div class="q-mt-xl">    <!-- Comments list -->
+    <div class="q-mt-xl"> 
+      <div class="text-subtitle2 q-mb-sm">
+        Displaying {{ filteredComments.length }} of {{ comments.length }} comment<span v-if="comments.length !== 1">s</span>
+      </div>   <!-- Comments list -->
       <q-list>
         <q-item v-for="comment in filteredComments" :key="comment.id">
           <q-item-section class="text-left">
@@ -124,6 +137,9 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div v-if="filteredComments.length === 0" class="q-pa-md text-grey text-subtitle1 text-center">
+        No comments match the selected filters.
+      </div>
     </div>
   </q-page>
 </div>
@@ -235,42 +251,19 @@ export default {
       }
     },
 
-    updateFilteredCommentsByTag() {
-      if (this.selectedHashtags.length === 0) {
-        this.filteredComments = this.comments;
-      } else {
-        this.filteredComments = this.comments.filter(comment => {
+    updateFilteredComments() {
+      this.filteredComments = this.comments.filter(comment => {
+          const withinCategory = !this.selectedCategory || comment.category === this.selectedCategory.value;
           const selectedHashtagValues = this.selectedHashtags.map(tag => tag.value);
-          return comment.hashtags.some(tag => selectedHashtagValues.includes(tag));
+          const matchesTags = this.selectedHashtags.length === 0 || comment.hashtags.some(tag => selectedHashtagValues.includes(tag));
+          const withinDateRange = (!this.dateRange?.from || comment.date >= this.dateRange.from) &&
+                                  (!this.dateRange?.to || comment.date <= this.dateRange.to);
+          return withinCategory && matchesTags && withinDateRange;
         });
-      }
-    },
-
-    updateFilteredCommentsByCategory() {
-      if (!this.selectedCategory) {
-        this.filteredComments = this.comments;
-      } else {
-        var z = this.selectedCategory;
+        var x = this.filteredComments.length;
+        var y = this.filteredComments;
         debugger;
-        this.comments.forEach(comment => { console.log(comment.id); console.log(comment.category); });
-        this.filteredComments = this.comments.filter(comment => {
-          return comment.category === this.selectedCategory.value;
-        });
-      }
-    },
-
-    updateFilteredCommentsByDate() {
-      if (this.dateRange?.from && this.dateRange?.to) {
-        this.filteredComments = this.comments.filter(comment => {
-          //console.log(comment.date + '    ' + fromDate + '    ' + toDate);
-
-          return comment.date >= this.dateRange.from && comment.date <= this.dateRange.to;
-        });
-      } else {
-        this.filteredComments = this.comments;
-      }
-    },
-
+      },
 
     showTagModal(commentId) {
       this.showTagModalVisible[commentId] = true
@@ -296,7 +289,6 @@ export default {
   },
   mounted() {
     this.filteredComments = this.comments;
-    this.updateFilteredCommentsByCategory(); // Add this line
     this.$nextTick(() => {
       this.updateHashtags()
     })
