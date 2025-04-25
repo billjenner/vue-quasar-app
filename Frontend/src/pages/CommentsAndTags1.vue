@@ -21,11 +21,8 @@
       <q-toolbar-title v-if="!miniDrawer" class="text-subtitle2">Filters</q-toolbar-title>
     </q-toolbar>
 
-
     <div v-if="!miniDrawer" class="q-pa-sm">
-      <q-btn label="Clear All Filters" @click="clearAllFilters" class="q-mt-md" color="primary" flat />
-
-      <q-select  class="q-pa-sm"
+      <q-select
         clearable
         filled
         v-model="selectedCategory"
@@ -34,7 +31,7 @@
         @update:model-value="updateFilteredComments"
       />
 
-      <div class="text-subtitle2 q-pa-sm">
+      <div class="text-subtitle2 q-mb-xs">
         From: {{ dateRange.from || '—' }} &nbsp;&nbsp; To: {{ dateRange.to || '—' }}
       </div>
       <q-date 
@@ -57,7 +54,7 @@
         use-chips
         stack-label
         label="Select hashtags"
-        class="rounded q-pa-sm"
+        class="rounded q-mt-sm"
         @update:model-value="updateFilteredComments"
         :options-dense="true"
       />
@@ -68,7 +65,6 @@
         <q-chip v-for="tag in hashtags" :key="tag.value">{{ tag.label }}<span class="text-accent text-weight-bold q-ml-xs">({{ tag.count }})</span></q-chip>
       </div>
     </div>
-
   </q-drawer>
 
 
@@ -95,7 +91,7 @@
       </div>
       <div class="col-1 q-ml-md">
         <q-btn label="Add Comment" @click="addComment" />
-        <!-- <q-btn label="Reload" @click="fetchCommentsFromAPI" /> -->
+        <q-btn label="Reload" @click="fetchCommentsFromAPI" />
       </div>
     </div>
 
@@ -152,7 +148,7 @@
 
 <script>
   import axios from 'axios';
-export default {
+  export default {
   data() {
     return {
       rightDrawerOpen: true,
@@ -167,14 +163,7 @@ export default {
         { label: 'Idea', value: 'Idea' },
         { label: 'Discussion', value: 'Discussion' },
       ],
-      comments: [
-        { id: 1, text: 'This is a comment', hashtags: ['tag2', 'tag1'], category: 'General', date: '2022-01-01' },
-        { id: 2, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate impedit eveniet deserunt, quam atque nisi deleniti esse perferendis commodi voluptas eaque autem quidem quibusdam, corrupti, ratione facilis fugiat molestias distinctio dolores aliquam. Asperiores maiores eligendi quas ducimus quam mollitia ad eius nisi. Repellat hic officiis ea exercitationem natus vero quos!', hashtags: ['tag3', 'tag4'], category: 'Feedback', date: '2022-01-05' },
-        { id: 3, text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur, pariatur! Repudiandae tenetur ea maxime voluptatem saepe commodi adipisci dignissimos molestias?', hashtags: ['tag11', 'tag4'], category: 'Suggestion', date: '2022-01-10' },
-        { id: 4, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. ', hashtags: ['tag5'], category: 'Question', date: '2022-01-12' },
-        { id: 5, text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus, reprehenderit cumque?', hashtags: ['tag6'], category: 'Idea', date: '2022-01-15' },
-        { id: 6, text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quas, fuga neque voluptas et, a quam impedit obcaecati maiores repellat facere amet dolore tempora ad vel iusto fugiat temporibus laborum dicta praesentium ducimus corrupti reprehenderit animi voluptate? Optio ex quia accusamus labore eveniet nesciunt porro doloremque consequuntur sapiente, sint ducimus perspiciatis. Aspernatur vitae optio alias velit ea, atque corporis suscipit aliquam doloribus! Quos quae sit vel accusamus aliquam quam totam, magnam omnis id facere, dolorum atque asperiores nulla unde praesentium vitae repellat minus, voluptas mollitia ipsa? Quisquam officiis hic sint, corrupti nihil amet consequuntur, illum incidunt earum aperiam quibusdam modi rerum tenetur ullam alias aut voluptatibus ea, in exercitationem deserunt consectetur laboriosam, nihil iure error dolor fuga reiciendis enim! Ipsam, necessitatibus labore autem unde, obcaecati esse corrupti debitis exercitationem enim aspernatur aliquid. Sed fugiat officia expedita assumenda nisi neque quis eligendi repellat, architecto praesentium placeat eos eveniet! Quaerat temporibus sapiente aliquid distinctio ducimus sunt officiis harum, alias mollitia aliquam perspiciatis animi vero fuga explicabo cupiditate molestiae eius. Molestiae tempora, ab explicabo quisquam quia eius dolorem odio aperiam blanditiis ipsum soluta totam aut consectetur tempore necessitatibus ex quaerat nobis voluptas. Eveniet praesentium harum, rem dolor placeat vitae fugit.', hashtags: ['tag6', 'tag7', 'tag8'], category: 'Discussion', date: '2022-01-20' },
-      ],
+      comments: [],
       dateRange: {
         from: null,
         to: null
@@ -235,16 +224,24 @@ export default {
 
     removeHashtag(commentId, tag) {
       const comment = this.comments.find((c) => c.id === commentId)
+
       if (comment) {
         comment.hashtags = comment.hashtags.filter((t) => t !== tag)
+
+        // Check if the tag is used in any other comment
         const isTagUsed = this.comments.some((c) => c.hashtags.includes(tag))
+
         if (!isTagUsed) {
+          // Remove the hashtag from the global list if unused
           this.hashtags = this.hashtags.filter((t) => t !== tag)
         }
-        this.filteredComments = this.comments
+        this.filteredComments = this.comments // Refresh the filtered list
+
+        // Clear input for that specific comment
         setTimeout(() => {
           this.newHashtags[commentId] = ''
         }, 0)
+
         this.updateHashtags();
       }
     },
@@ -268,6 +265,7 @@ export default {
     },
 
     updateHashtags() {
+      console.log(`[${new Date().toLocaleString()}] Inside updateHashtags() step 1`);
       const hashtagCounts = {};
       this.comments.forEach(comment => {
         comment.hashtags.forEach(tag => {
@@ -285,23 +283,14 @@ export default {
       }));
       console.log(`[${new Date().toLocaleString()}] Inside updateHashtags() step 2`);
     },
-    clearDateRange() {
-      this.dateRange = {};
-      this.updateFilteredComments();
-    },
-    clearAllFilters() {
-      this.selectedCategory = null;
-      this.selectedHashtags = [];
-      this.dateRange = {};
-      this.updateFilteredComments();
-    },
+
     async fetchCommentsFromAPI() {
       try {
         console.log(`[${new Date().toLocaleString()}] Inside fetchCommentsFromAPI() step 1`);
-        const response = await axios.get('http://localhost:3000/comments');
+        const response = await axios.get('http://localhost:3000/comments'); // Adjust URL as needed
         console.log(`[${new Date().toLocaleString()}] Inside fetchCommentsFromAPI() step 2`);
         this.comments = response.data || [];
-    this.filteredComments = this.comments;
+        this.filteredComments = this.comments;
         console.log(`[${new Date().toLocaleString()}] Inside fetchCommentsFromAPI() step 3`);
         this.updateHashtags();
         console.log(`[${new Date().toLocaleString()}] Inside fetchCommentsFromAPI() step 4`);
@@ -315,13 +304,11 @@ export default {
   },
 },
   mounted() {
-    //console.log(`[${new Date().toLocaleString()}] Inside mounted() before fetch`);
-    //this.fetchCommentsFromAPI();
-    //console.log(`[${new Date().toLocaleString()}] Inside mounted() after fetch`);
+    console.log(`[${new Date().toLocaleString()}] Inside mounted() before fetch`);
+    this.fetchCommentsFromAPI();
+    console.log(`[${new Date().toLocaleString()}] Inside mounted() after fetch`);
     this.$nextTick(() => {
-      console.log(`[${new Date().toLocaleString()}] Inside $nextTick() 1`);
-      this.updateHashtags();
-      console.log(`[${new Date().toLocaleString()}] Inside $nextTick() 2`);
+      console.log(`[${new Date().toLocaleString()}] Inside $nextTick()`);
     })
         //this.filteredComments = this.comments;
   },

@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -67,6 +70,24 @@ app.put('/todos/:id', async (req, res) => {
 app.delete('/todos/:id', async (req, res) => {
   const deletedTodo = await Todo.findByIdAndDelete(req.params.id);
   res.json(deletedTodo);
+});
+
+app.get('/comments', (req, res) => {
+  const filePath = path.join(__dirname, 'comments.json');
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading comments.json:', err);
+      return res.status(500).json({ error: 'Failed to read comments data' });
+    }
+
+    try {
+      const jsonData = JSON.parse(data);
+      res.json(jsonData.comments); // return only the "comments" array
+    } catch (parseErr) {
+      console.error('Error parsing comments.json:', parseErr);
+      res.status(500).json({ error: 'Failed to parse comments data' });
+    }
+  });
 });
 
 // Start Server
