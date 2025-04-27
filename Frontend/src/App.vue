@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh lpr ffr">
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title class="text-left">
@@ -12,12 +12,7 @@
     </q-header>
 
     <q-page-container>
-      <router-view v-slot="{ Component, route }">
-        <!-- Use a custom transition or fallback to `fade` -->
-        <transition name="fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>

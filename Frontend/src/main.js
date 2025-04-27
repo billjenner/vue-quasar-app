@@ -3,6 +3,9 @@ import { createApp } from 'vue';
 import { Quasar } from 'quasar';
 import router from './router';
 import { createPinia } from 'pinia';
+import quasarIconSet from 'quasar/icon-set/material-icons';
+import quasarLanguage from 'quasar/lang/en-US';
+import 'quasar/dist/quasar.css';
 
 import './style.css';
 
@@ -26,7 +29,9 @@ app.use(pinia);
 app.use(router);
 
 app.use(Quasar, {
-  plugins: {}, // import Quasar plugins and add here
+  plugins: {},
+  lang: quasarLanguage,
+  iconSet: quasarIconSet,
 });
 
 // Assumes you have a <div id="app"></div> in your index.html

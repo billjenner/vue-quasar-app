@@ -1,33 +1,51 @@
-// filepath: c:\dev\vue-quasar-app\Frontend\src\pages\Home.vue
 <template>
   <div class="page-container">
-<div class="q-pa-xs">
-    <q-list bordered separator>
-      <q-item clickable v-ripple>
-        <q-item-section>Single line item</q-item-section>
-      </q-item>
 
-      <q-item clickable v-ripple>
-        <q-item-section>
-          <q-item-label>Item with caption</q-item-label>
-          <q-item-label caption>Caption</q-item-label>
-        </q-item-section>
-      </q-item>
+    <div class="q-pa-xs">
+      <q-btn 
+        label="Show Notification" 
+        color="primary" 
+        @click="showNotification" 
+        class="q-mt-md" 
+      />
+      <q-list bordered separator>
+        <q-item clickable v-ripple>
+          <q-item-section>Single line item</q-item-section>
+        </q-item>
 
-      <q-item clickable v-ripple>
-        <q-item-section>
-          <q-item-label overline>OVERLINE</q-item-label>
-          <q-item-label>Item with overline</q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
+        <q-item clickable v-ripple>
+          <q-item-section>
+            <q-item-label>Item with caption</q-item-label>
+            <q-item-label caption>Caption</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple>
+          <q-item-section>
+            <q-item-label overline>OVERLINE</q-item-label>
+            <q-item-label>Item with overline</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+
+      <!-- Button to trigger notification -->
+
+    </div>
   </div>
-</div>
 </template>
 
 <script>
 export default {
   name: 'HomePage',
+  methods: {
+    showNotification() {
+      this.$q.notify({
+        message: 'Comment added successfully',
+        color: 'green',
+        position: 'top',
+      });
+    }
+  }
 };
 </script>
 
