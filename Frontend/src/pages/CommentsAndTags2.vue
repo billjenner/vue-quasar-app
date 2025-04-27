@@ -338,9 +338,3 @@
   },
 }
 </script>
-<style>
-.smaller-date {
-  transform: scale(0.85);
-  transform-origin: top left;
-}
-</style>
