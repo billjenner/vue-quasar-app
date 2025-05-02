@@ -39,7 +39,7 @@ function generateHashtags() {
 function generateCommentsJson() {
   const comments = [];
 
-  for (let i = 1; i <= 1000; i++) {
+  for (let i = 1; i <= 200; i++) {
     comments.push({
       id: i,
       text: `Random comment fdsfsdfds dsfafddsaf fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf  fdsfsdf #${i}`,

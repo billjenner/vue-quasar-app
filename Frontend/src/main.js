@@ -24,7 +24,7 @@ import App from './App.vue';
 const app = createApp(App);
 const pinia = createPinia();
 
-app.component('RouterLink', RouterLink);
+//app.component('RouterLink', RouterLink);
 app.use(pinia);
 app.use(router);
 

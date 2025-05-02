@@ -1,29 +1,84 @@
+
 <template>
-  <div>
-  <q-drawer
 
-    v-model="drawer"
-    :width="300"
-  >
 
-    <div  class="q-pa-sm">
+    <q-page class="full-width">
+      <q-header bordered class="bg-primary text-white">
       <q-toolbar>
-        <q-toolbar-title  class="text-subtitle2">Filters</q-toolbar-title>
-        </q-toolbar>
+        <q-toolbar-title class="text-center">
+          Comment Filters
+        </q-toolbar-title>
+        <q-space />
+        <q-tabs>
+          <q-route-tab to="/Todos" label="Todos" />
+          <q-route-tab to="/todos2" label="todos2" />
+          <q-route-tab to="/todoGrid" label="todoGrid" />
+        </q-tabs>
+        <q-btn dense flat round icon="menu" @click="toggleDrawer" />
+      </q-toolbar>
+    </q-header>
 
-      <q-btn label="Clear All Filters" @click="clearAllFilters" class="q-mt-md" color="primary" flat />
-
-      <q-select  class="q-pa-sm"
-        clearable
+      <q-toolbar>
+      <q-input 
+        v-model="newCommentText" 
+        placeholder="Enter a new comment" 
+        type="textarea"
+        autogrow
         filled
-        v-model="selectedCategory"
-        :options="categories"
-        label="Filter by Category"
-        @update:model-value="updateFilteredComments"
+        class="highlighted-input flex-1"
+        style="min-width: 50vw;"
       />
 
-      <div class="text-subtitle2 q-pa-sm">
+      <q-select 
+        outlined
+        v-model="newCommentCategory"
+        :options="categories"
+        label="Select Category"
+        class="flex-none q-pa-md"
+        style="min-width: 210px;"
+      />
+
+      <q-btn 
+        label="Add Comment" 
+        @click="addComment" 
+        class="flex-none"
+      />
+      </q-toolbar>
+
+    <q-drawer 
+        v-model="drawerOpen" 
+        side="left" 
+        behavior="mobile"
+        :width=265>
+      <q-toolbar>
+        <q-toolbar-title class="text-primary">Filters</q-toolbar-title>
+      </q-toolbar>
+
+      <div class="q-pa-sm">
+      <q-btn label="Clear All Filters" @click="clearAllFilters" class="q-mt-md" color="primary" flat />
+
+      <div class="q-mt-xl">
+        <q-select  class="q-pa-sm"
+          clearable
+          filled
+          v-model="selectedCategory"
+          :options="categories"
+          label="Filter by Category"
+          @update:model-value="updateFilteredComments"
+        />
+      </div>
+
+      <div class="text-subtitle2 q-mt-xl">
         From: {{ dateRange.from || '—' }} &nbsp;&nbsp; To: {{ dateRange.to || '—' }}
+        <br />
+        <q-btn 
+        label="Clear Dates" 
+        color="primary" 
+        flat 
+        size="sm" 
+        class="q-mt-sm"
+        @click="clearDateRange" 
+      />
       </div>
       <q-date 
         v-model="dateRange" 
@@ -33,67 +88,37 @@
         dense
         minimal
         flat
-        class="q-mt-sm"
+        class="q-mt-sm smaller-date"
         @update:model-value="updateFilteredComments" 
       />
 
-      <q-select
-        filled
-        v-model="selectedHashtags"
-        multiple
-        :options="hashtags"
-        use-chips
-        stack-label
-        label="Select hashtags"
-        class="rounded q-pa-sm"
-        @update:model-value="updateFilteredComments"
-        :options-dense="true"
-      />
 
+      <div class="text-subtitle2 q-mt-xl">
+        <q-select
+          filled
+          v-model="selectedHashtags"
+          multiple
+          :options="hashtags"
+          use-chips
+          stack-label
+          label="Select hashtags"
+          class="rounded q-pa-sm"
+          @update:model-value="updateFilteredComments"
+          :options-dense="true"
+        />
+      </div>
       <q-separator class="q-mt-md q-mb-md" />
 
       <div class="row flex justify-start q-gutter-xs">
         <q-chip v-for="tag in hashtags" :key="tag.value">{{ tag.label }}<span class="text-accent text-weight-bold q-ml-xs">({{ tag.count }})</span></q-chip>
       </div>
     </div>
-
-</q-drawer>
-
-
-  <q-page class="full-width">
-    <h4>Comments Filters</h4>
-    {{ drawer }}
-    <div class="q-mt-md">drawer: {{ drawer }}</div>
-    <div class="q-mt-md">miniDrawer: {{ miniDrawer }}</div>
-    <div class="row">
-      <div class="col-8">
-        <q-input 
-          v-model="newCommentText" 
-          placeholder="Enter a new comment" 
-          type="textarea"
-          autogrow
-          filled
-          class="highlighted-input"
-        />
-      </div>
-      <div class="col-2 q-ml-md">
-        <q-select
-          outlined
-          v-model="newCommentCategory"
-          :options="categories"
-          label="Select Category"
-        />
-      </div>
-      <div class="col-1 q-ml-md">
-        <q-btn label="Add Comment" @click="addComment" />
-      </div>
-    </div>
+    </q-drawer>
 
     <div class="q-mt-xl"> 
       <div class="text-subtitle2 q-mb-sm">
         Displaying {{ filteredComments.length }} of {{ comments.length }} comment<span v-if="comments.length !== 1">s</span>
-      </div>
-      <q-scroll-area class="fit">
+      </div>   <!-- Comments list -->
       <q-list>
         <q-item v-for="comment in filteredComments" :key="comment.id">
           <q-item-section class="text-left">
@@ -120,7 +145,7 @@
             </q-dialog>
 
             <div>
-              <q-btn @click="showTagModal(comment.id)" flat size="sm" class="col-6">Click to add tags...</q-btn>
+              <q-btn @click="showTagModal(comment.id)" flat size="sm" class="col-6 text-secondary">Click to add tags...</q-btn>
               <q-chip
                 v-for="tag in comment.hashtags"
                 :key="tag"
@@ -133,21 +158,19 @@
           </q-item-section>
         </q-item>
       </q-list>
-    </q-scroll-area>
       <div v-if="filteredComments.length === 0" class="q-pa-md text-grey text-subtitle1 text-center">
         No comments match the selected filters.
       </div>
     </div>
   </q-page>
-</div>
 </template>
 
 <script>
   import axios from 'axios';
-export default {
+  export default {
   data() {
     return {
-      drawer: true,
+      drawerOpen: false,
       selectedCategory: null,
       newCommentCategory: null,
       categories: [
@@ -170,19 +193,22 @@ export default {
         from: null,
         to: null
       },
-      hashtags: [],
+      hashtags: [], // Global hashtag list
       selectedFilter: [],
       filteredComments: [],
-      filterAllTags: false, 
-      newCommentText: '',
+      filterAllTags: false, // Toggle between "all tags" and "any tags" filter
+      newCommentText: '', // To store new comment text
       newHashtags: {}, 
       newHashtags2: {},
       showTagModalVisible: {},
-      selectedHashtags: [],
+      selectedHashtags: [],// Stores input values keyed by comment ID
     }
   },
 
   methods: {
+    toggleDrawer () {
+      this.drawerOpen = !this.drawerOpen
+    },
     addComment() {
       if (this.newCommentText.trim() && this.newCommentCategory) {
         const currentDate = new Date().toISOString().split('T')[0];
@@ -194,19 +220,19 @@ export default {
           date: currentDate,
         })
 
+        // Clear input for that specific comment
         this.newCommentText = ''
         this.newCommentCategory = null
-        this.filteredComments = this.comments 
+        this.updateHashtags();
+        this.updateFilteredComments();// Refresh the comment list
       } else {
+        // Show an error message if category is not selected
         this.$q.notify({
           message: 'Please select a category',
           color: 'red',
+          position: 'top'
         })
       }
-      this.$q.notify({
-          message: 'Added new comment',
-          color: 'red',
-        })
     },
 
     addHashtagToComment(commentId) {
@@ -223,6 +249,7 @@ export default {
         }
         this.newHashtags[commentId] = ''
         this.updateHashtags();
+        this.updateFilteredComments();
       }
     },
 
@@ -234,27 +261,15 @@ export default {
         if (!isTagUsed) {
           this.hashtags = this.hashtags.filter((t) => t !== tag)
         }
-        this.filteredComments = this.comments
         setTimeout(() => {
           this.newHashtags[commentId] = ''
         }, 0)
         this.updateHashtags();
+        this.updateFilteredComments();
       }
     },
 
-    updateFilteredComments() {
-      this.filteredComments = this.comments.filter(comment => {
-          const withinCategory = !this.selectedCategory || comment.category === this.selectedCategory.value;
-          const selectedHashtagValues = this.selectedHashtags.map(tag => tag.value);
-          const matchesTags = this.selectedHashtags.length === 0 || comment.hashtags.some(tag => selectedHashtagValues.includes(tag));
-          const withinDateRange = (!this.dateRange?.from || comment.date >= this.dateRange.from) &&
-                                  (!this.dateRange?.to || comment.date <= this.dateRange.to);
-          return withinCategory && matchesTags && withinDateRange;
-        });
-        var x = this.filteredComments.length;
-        var y = this.filteredComments;
-        debugger;
-      },
+
 
     showTagModal(commentId) {
       this.showTagModalVisible[commentId] = true
@@ -276,8 +291,17 @@ export default {
         value: tag,
         count: hashtagCounts[tag],
       }));
-      console.log(`[${new Date().toLocaleString()}] Inside updateHashtags() step 2`);
     },
+    updateFilteredComments() {
+      this.filteredComments = this.comments.filter(comment => {
+          const withinCategory = !this.selectedCategory || comment.category === this.selectedCategory.value;
+          const selectedHashtagValues = this.selectedHashtags.map(tag => tag.value);
+          const matchesTags = this.selectedHashtags.length === 0 || comment.hashtags.some(tag => selectedHashtagValues.includes(tag));
+          const withinDateRange = (!this.dateRange?.from || comment.date >= this.dateRange.from) &&
+                                  (!this.dateRange?.to || comment.date <= this.dateRange.to);
+          return withinCategory && matchesTags && withinDateRange;
+        });
+      },
     clearDateRange() {
       this.dateRange = {};
       this.updateFilteredComments();
@@ -290,16 +314,11 @@ export default {
     },
     async fetchCommentsFromAPI() {
       try {
-        console.log(`[${new Date().toLocaleString()}] Inside fetchCommentsFromAPI() step 1`);
         const response = await axios.get('http://localhost:3000/comments');
-        console.log(`[${new Date().toLocaleString()}] Inside fetchCommentsFromAPI() step 2`);
         this.comments = response.data || [];
-    this.filteredComments = this.comments;
-        console.log(`[${new Date().toLocaleString()}] Inside fetchCommentsFromAPI() step 3`);
+        this.filteredComments = this.comments;
         this.updateHashtags();
-        console.log(`[${new Date().toLocaleString()}] Inside fetchCommentsFromAPI() step 4`);
       } catch (error) {
-        console.error('Failed to fetch comments:', error);
         this.$q.notify({
           message: 'Unable to fetch comments from server',
           color: 'negative'
@@ -308,19 +327,11 @@ export default {
   },
 },
   mounted() {
+    //console.log(`[${new Date().toLocaleString()}] Inside mounted() before fetch`);
+    this.fetchCommentsFromAPI();
     this.$nextTick(() => {
-      console.log(`[${new Date().toLocaleString()}] Inside $nextTick() 1`);
       this.updateHashtags();
-      console.log(`[${new Date().toLocaleString()}] Inside $nextTick() 2`);
     })
   },
 }
 </script>
-
-<style scoped>
-.rotate-180 {
-  transform: rotate(180deg);
-  transition: transform 0.3s ease;
-}
-
-</style>

@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="hHh Lpr iFf">
-    <q-header elevated>
+  <q-layout view="hHh Lpr fFf">
+    <q-header elevated v-if="showHeader">
       <q-toolbar>
         <q-toolbar-title class="text-left">
           To Do List
@@ -31,6 +31,7 @@ export default defineComponent({
   },
   data() {
     return {
+      drawerOpen: false,
       currentMenu: 'A'
     };
   },
@@ -38,7 +39,20 @@ export default defineComponent({
     switchMenu() {
       this.currentMenu = this.currentMenu === 'A' ? 'B' : 'A';
     }
-  }
+  },
+  computed: {
+    headerTitle() {
+      const route = this.$route.path;
+      if (route === "/comments-tags") return "Comments & Tags";
+      if (route === "/settings") return "Settings";
+      if (route === "/dashboard") return "Dashboard";
+      return "My App"; // Default title
+    },
+    showHeader() {
+      return this.$route.path !== "/commentsAndTags" && 
+             this.$route.path !== "/comments-tags";
+    }
+  },
 });
 </script>
 
