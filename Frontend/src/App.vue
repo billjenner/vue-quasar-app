@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpr ffr">
+  <q-layout view="hHh Lpr iFf">
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title class="text-left">
@@ -45,13 +45,7 @@ export default defineComponent({
 <style lang="scss">
 
 // Custom button color
-.q-btn {
-  color: rgb(256, 128, 64) !important;
-  
-  &.q-btn--flat:hover {
-    background: rgba(256, 128, 64, 0.1) !important;
-  }
-}
+
 
 .q-toolbar {
   color: rgb(200, 208, 216) !important;

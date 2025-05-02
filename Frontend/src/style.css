@@ -13,15 +13,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #17ECD7;
-  text-decoration: inherit;
-}
+
 a:hover {
-  color: #096e22;
+  color: rgb(178, 34, 34);
 }
 
+.shrink-text {
+  font-size: 85%;
+}
+.shrink-text-2 {
+  font-size: 75%;
+}
+.shrink-text-3 {
+  font-size: 65%;
+}
+.shrink-text-4 {
+  font-size: 55%;
+}
+.shrink-text-5 {
+  font-size: 45%;
+}
 body {
   margin: 0;
   display: flex;

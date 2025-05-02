@@ -1,6 +1,6 @@
 
 <template>
-  <q-layout view="hHh Lpr lff">
+  <q-layout view="hHh Lpr lFf">
 
     <q-header bordered class="bg-primary text-white">
       <q-toolbar>
@@ -88,7 +88,7 @@
     </q-drawer>
 
     <q-page class="full-width">
-      <div class="q-gutter-md flex items-center" style="flex-wrap: nowrap; width: 100%; justify-content: flex-start;">
+      <q-toolbar>
       <q-input 
         v-model="newCommentText" 
         placeholder="Enter a new comment" 
@@ -99,13 +99,13 @@
         style="min-width: 50vw;"
       />
 
-      <q-select
+      <q-select 
         outlined
         v-model="newCommentCategory"
         :options="categories"
         label="Select Category"
-        class="flex-none"
-        style="min-width: 200px;"
+        class="flex-none q-pa-md"
+        style="min-width: 210px;"
       />
 
       <q-btn 
@@ -113,7 +113,7 @@
         @click="addComment" 
         class="flex-none"
       />
-    </div>
+      </q-toolbar>
 
     <div class="q-mt-xl"> 
       <div class="text-subtitle2 q-mb-sm">
@@ -145,7 +145,7 @@
             </q-dialog>
 
             <div>
-              <q-btn @click="showTagModal(comment.id)" flat size="sm" class="col-6">Click to add tags...</q-btn>
+              <q-btn @click="showTagModal(comment.id)" flat size="sm" class="col-6 text-secondary">Click to add tags...</q-btn>
               <q-chip
                 v-for="tag in comment.hashtags"
                 :key="tag"
