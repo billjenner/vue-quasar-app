@@ -1,6 +1,10 @@
 <template>
   <div class="nav-buttons">
     <q-btn flat :to="{ name: 'Home' }" label="Home" />
+    <q-tabs>
+      <q-route-tab to="/Notify" label="Notify" />
+      <q-route-tab to="/Notify" label="Notify Again" />
+    </q-tabs>
     <q-btn flat :to="{ name: 'Todos' }" label="Todos" /> 
     <q-btn flat :to="{ name: 'Todos2' }" label="Todos2" />
     <q-btn flat :to="{ name: 'TodoGrid' }" label="TodoGrid" />

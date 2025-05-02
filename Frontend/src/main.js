@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouterLink } from 'vue-router';
 import { createApp } from 'vue';
-import { Quasar } from 'quasar';
+import { Quasar, Notify } from 'quasar';
 import router from './router';
 import { createPinia } from 'pinia';
 import quasarIconSet from 'quasar/icon-set/material-icons';
@@ -29,7 +29,7 @@ app.use(pinia);
 app.use(router);
 
 app.use(Quasar, {
-  plugins: {},
+  plugins: { Notify },
   lang: quasarLanguage,
   iconSet: quasarIconSet,
 });

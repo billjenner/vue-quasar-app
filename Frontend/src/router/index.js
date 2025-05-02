@@ -5,7 +5,7 @@ import Todos from '../pages/Todos.vue';
 import Todos2 from '../components/TodoList2.vue';
 import TodoGrid from '../components/TodoGrid.vue';
 import TodoEdit from '../components/TodoEdit.vue';
-
+import Notify from '../pages/Notify.vue';
 const routes = [
   {
     path: '/',
@@ -36,7 +36,17 @@ const routes = [
     path: '/todo-edit/:id',
     name: 'todo-edit',
     component: TodoEdit,
-  }, //// ...existing routes...
+  },
+  {
+    path: '/commentsAndTags',
+    name: 'CommentsAndTags',
+    component: CommentsAndTags,
+  },
+  {
+    path: '/notify',
+    name: 'Notify',
+    component: Notify,
+  },
 ];
 
 const router = createRouter({
