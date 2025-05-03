@@ -1,11 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../pages/Home.vue';
 import CommentsAndTags from '../pages/CommentsAndTags.vue';
+
+import Notes from '../pages/Notes.vue';
+import Note from '../pages/Note.vue';
+import New from '../pages/New.vue';
+
 import Todos from '../pages/Todos.vue';
 import Todos2 from '../components/TodoList2.vue';
 import TodoGrid from '../components/TodoGrid.vue';
 import TodoEdit from '../components/TodoEdit.vue';
 import Notify from '../pages/Notify.vue';
+
+import Error404 from '../pages/Error404.vue';
 const routes = [
   {
     path: '/',
@@ -46,6 +53,25 @@ const routes = [
     path: '/notify',
     name: 'Notify',
     component: Notify,
+  },
+  {
+    path: '/notes',
+    name: 'Notes',
+    component: Notes,
+  },
+  {
+    path: '/note/:id',
+    name: 'Note',
+    component: Note,
+  },
+  {
+    path: '/new',
+    name: 'New',
+    component: New,
+  },
+  {
+    path: '/:catchAll(.*)*',
+    component: Error404,
   },
 ];
 
