@@ -1,18 +1,17 @@
 <script>
-/* eslint-disable */
-import Container from '../components/Container.vue'
-import NoteCard from '../components/NoteCard.vue'
-import { useLocalNotes } from '../helper'
+import Container from '../../components/notes/Container.vue'
+import NoteCard from '../../components/notes/NoteCard.vue'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
+import { useNotesStore } from '../../stores/notesStore'
 
 export default defineComponent({
   components: { NoteCard, Container },
   name: 'PageIndex',
   setup() {
-    const notes = useLocalNotes()
+    const notesStore = useNotesStore()
     const router = useRouter()
-    return { router, notes }
+    return { router, notes: notesStore.notes }
   }
 })
 </script>

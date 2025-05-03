@@ -167,6 +167,10 @@
 
 <script>
   import axios from 'axios';
+  import { useQuasar } from 'quasar'
+
+  const $q = useQuasar()
+
   export default {
   data() {
     return {
@@ -229,8 +233,9 @@
         // Show an error message if category is not selected
         this.$q.notify({
           message: 'Please select a category',
-          color: 'red',
-          position: 'top'
+          color: 'negative',
+          position: 'bottom-right',
+          timeout: 600
         })
       }
     },
@@ -335,3 +340,9 @@
   },
 }
 </script>
+<style scoped>
+.comment-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600
+}
+</style>

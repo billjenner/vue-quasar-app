@@ -1,20 +1,15 @@
-<!-- 
-    https://www.youtube.com/watch?v=qPkSwo8QyoA
-    https://github.com/codingwithjustin/quasar-note-app 
--->
-
 <script>
-import Container from '../components/Container.vue'
+import Container from '../../components/notes/Container.vue'
 import { defineComponent, reactive, ref } from 'vue'
-import { useLocalNotes } from '../helper'
 import { useRouter } from 'vue-router'
+import { useNotesStore } from '../../stores/notesStore'
 
 export default defineComponent({
   components: { Container },
   name: 'PageNew',
   setup() {
     const router = useRouter()
-    const notes = useLocalNotes()
+    const notesStore = useNotesStore()
 
     const note = reactive({
       title: '',
@@ -25,13 +20,8 @@ export default defineComponent({
     const editor = ref('Here we are overriding the <b>bold</b> command to include a label instead of an icon and also changing its tooltip.')
 
     const submit = () => {
-      notes.value.unshift({
-        ...note,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-      })
-
-      router.push('/')
+      notesStore.addNote(note)
+      router.push('/notes')
 
       note.title = ''
       note.description = ''

@@ -1,21 +1,21 @@
 <script>
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useLocalNotes } from '../helper'
-import Container from '../components/Container.vue'
+import { useNotesStore } from '../../stores/notesStore'
+import Container from '../../components/notes/Container.vue'
 
 export default {
   components: { Container },
   setup() {
-    const notes = useLocalNotes()
+    const notesStore = useNotesStore()
     const route = useRoute()
     const noteId = computed(() => parseInt(route.params.id))
-    const note = computed(() => notes.value[noteId.value])
+    const note = computed(() => notesStore.notes[noteId.value])
 
     const router = useRouter()
     const remove = () => {
-      notes.value.splice(noteId.value, 1)
-      router.push('/')
+      notesStore.notes.splice(noteId.value, 1)
+      router.push('/notes')
     }
 
     const editing = ref(false)

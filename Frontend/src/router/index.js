@@ -2,9 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../pages/Home.vue';
 import CommentsAndTags from '../pages/CommentsAndTags.vue';
 
-import Notes from '../pages/Notes.vue';
-import Note from '../pages/Note.vue';
-import New from '../pages/New.vue';
+import Notes from '../pages/notes/Notes.vue';
+import Note from '../pages/notes/Note.vue';
+import New from '../pages/notes/New.vue';
 
 import Todos from '../pages/Todos.vue';
 import Todos2 from '../components/TodoList2.vue';
