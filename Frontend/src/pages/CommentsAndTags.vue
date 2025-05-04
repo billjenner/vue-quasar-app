@@ -341,8 +341,5 @@
 }
 </script>
 <style scoped>
-.comment-text {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600
-}
+
 </style>
