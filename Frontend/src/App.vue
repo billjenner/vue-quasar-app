@@ -3,7 +3,7 @@
     <q-header elevated v-if="showHeader">
       <q-toolbar>
         <q-toolbar-title class="text-left">
-          To Do List
+          To Do List 2
         </q-toolbar-title>
         <q-space />
         <menu-a v-if="currentMenu === 'A'" @switch-menu="switchMenu" />
